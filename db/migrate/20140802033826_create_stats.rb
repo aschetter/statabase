@@ -8,32 +8,32 @@ class CreateStats < ActiveRecord::Migration
       t.integer    :age
       t.integer    :gp
       t.integer    :gs
-      t.float      :min
-      t.float      :fg_made
+      t.integer    :min
+      t.integer    :fg_made
 
-      t.float      :fg_att
+      t.integer    :fg_att
       t.float      :fg_pct
-      t.float      :three_made
-      t.float      :three_att
+      t.integer    :three_made
+      t.integer    :three_att
       t.float      :three_pct
 
-      t.float      :two_made
-      t.float      :two_att
+      t.integer    :two_made
+      t.integer    :two_att
       t.float      :two_pct
-      t.float      :ft_made
-      t.float      :ft_att
+      t.integer    :ft_made
+      t.integer    :ft_att
 
       t.float      :ft_pct
-      t.float      :orb
-      t.float      :drb
-      t.float      :trb
-      t.float      :ast
+      t.integer    :orb
+      t.integer    :drb
+      t.integer    :trb
+      t.integer    :ast
 
-      t.float      :stl
-      t.float      :blk
-      t.float      :tov
-      t.float      :pf
-      t.float      :pts
+      t.integer    :stl
+      t.integer    :blk
+      t.integer    :tov
+      t.integer    :pf
+      t.integer    :pts
 
       t.timestamps
     end

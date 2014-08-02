@@ -12,8 +12,8 @@ module StatLoader
       doc = Nokogiri::HTML(open(html, "User-Agent" => user_agent), nil, "UTF-8")
 
       { :players => doc.css('#all_roster tbody tr'),
-        :stat => doc.css('#totals tbody tr'),
-        :adv => doc.css('#advanced tbody tr'),
+        :stats => doc.css('#totals tbody tr'),
+        :advs => doc.css('#advanced tbody tr'),
         :salaries => doc.css('#salaries tbody tr')
       }
     end
