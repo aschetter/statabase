@@ -11,7 +11,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140802033826) do
+ActiveRecord::Schema.define(version: 20140802062446) do
+
+  create_table "advs", force: true do |t|
+    t.integer  "player_id"
+    t.string   "br_id"
+    t.float    "per"
+    t.float    "ts_pct"
+    t.float    "efg_pct"
+    t.float    "ft_ar"
+    t.float    "three_ar"
+    t.float    "orb_pct"
+    t.float    "drb_pct"
+    t.float    "trb_pct"
+    t.float    "ast_pct"
+    t.float    "stl_pct"
+    t.float    "blk_pct"
+    t.float    "tov_pct"
+    t.float    "usg_pct"
+    t.float    "o_rtg"
+    t.float    "d_rtg"
+    t.float    "ows"
+    t.float    "dws"
+    t.float    "ws"
+    t.float    "ws_48"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "memberships", force: true do |t|
     t.integer  "player_id"
@@ -20,15 +46,17 @@ ActiveRecord::Schema.define(version: 20140802033826) do
     t.datetime "updated_at"
   end
 
-  create_table "per_games", force: true do |t|
-    t.string   "name"
-    t.integer  "player_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "players", force: true do |t|
+    t.string   "br_id"
     t.string   "name"
+    t.integer  "salary"
+    t.integer  "number"
+    t.string   "position"
+    t.string   "height"
+    t.string   "weight"
+    t.string   "birth_date"
+    t.string   "experience"
+    t.string   "college"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -41,20 +69,45 @@ ActiveRecord::Schema.define(version: 20140802033826) do
   end
 
   create_table "seasons", force: true do |t|
-    t.string   "name"
+    t.integer  "year"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "stats", force: true do |t|
-    t.string   "name"
     t.integer  "player_id"
+    t.string   "br_id"
+    t.integer  "age"
+    t.integer  "gp"
+    t.integer  "gs"
+    t.float    "min"
+    t.float    "fg_made"
+    t.float    "fg_att"
+    t.float    "fg_pct"
+    t.float    "three_made"
+    t.float    "three_att"
+    t.float    "three_pct"
+    t.float    "two_made"
+    t.float    "two_att"
+    t.float    "two_pct"
+    t.float    "ft_made"
+    t.float    "ft_att"
+    t.float    "ft_pct"
+    t.float    "orb"
+    t.float    "drb"
+    t.float    "trb"
+    t.float    "ast"
+    t.float    "stl"
+    t.float    "blk"
+    t.float    "tov"
+    t.float    "pf"
+    t.float    "pts"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   create_table "teams", force: true do |t|
-    t.string   "name"
+    t.string   "br_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
