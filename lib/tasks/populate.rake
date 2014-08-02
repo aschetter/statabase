@@ -19,7 +19,7 @@ namespace :db do
 
     # XXXXXXXXXXXXXXXXX PERSIST TEAM XXXXXXXXXXXXXXXXX
 
-    br_id = 0
+    br_id = 16
 
     teams = 
       [ "ATL", "BOS", "NJN", "CHA", "CHI", "CLE", "DAL", "DEN", 
@@ -241,7 +241,8 @@ namespace :db do
         updated: 0
       }
 
-      puts ""
+      @added = []
+      @updated = []
 
       doc[:salaries].map do |player|
 
@@ -263,23 +264,35 @@ namespace :db do
             salary: salary
           )
 
-          puts "CREATED PLAYER SALARY FOR: #{player.name}"
+          @added << player.name
           @salary[:added] += 1
 
         else
           player.name = name
           player.salary = salary
           player.save
-          puts "ADDED SALARY FOR: #{player.name}"
+
+          @updated << player.name
           @salary[:updated] += 1
         end
+      end
+
+      puts ""    
+      puts "PLAYERS ADDED WITH JUST SALARY:"
+      @added.each do |player|
+        puts player
+      end
+
+      puts ""    
+      puts "ADDED SALARY TO:"
+      @updated.each do |player|
+        puts player
       end
 
       puts ""
       puts "PLAYERS BASIC INFO ADDED: #{basic_info[:added]}"
       puts "SEASON TOTALS ADDED: #{stats[:added]}"
       puts "ADVANCED STATS ADDED: #{advs[:added]}"
-      puts ""
       puts "JUST PLAYER SALARY ADDED: #{@salary[:added]}"
       puts "PLAYERS UPDATED WITH SALARY INFO: #{@salary[:updated]}"
 
