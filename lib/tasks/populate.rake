@@ -8,11 +8,18 @@ namespace :db do
 
     year   = 2014
 
-    season = Season.create(year: year)
+    season = Season.find_by(year: year)
+
+    if season.nil?
+      season = Season.create(year: year)
+      puts ""
+      puts "ADDED TO THE DATABASE: #{season.year}"
+      puts ""
+    end
 
     # XXXXXXXXXXXXXXXXX PERSIST TEAM XXXXXXXXXXXXXXXXX
 
-    br_id = 20
+    br_id = 0
 
     teams = 
       [ "ATL", "BOS", "NJN", "CHA", "CHI", "CLE", "DAL", "DEN", 
@@ -24,8 +31,9 @@ namespace :db do
 
     if team.nil?
        
-      puts "TEAM ISN'T IN THE DATABASE. ADDING TO THE DATABASE: #{teams[br_id]}"
       team = season.teams.create(br_id: teams[br_id])
+      puts ""
+      puts "ADDED TO THE DATABASE: #{team.br_id}"
 
       attrs = {
           season: season,
@@ -33,6 +41,13 @@ namespace :db do
       }
 
       doc = StatLoader::LoadPage.run(attrs)
+
+      basic_info = {
+        added: 0
+      }
+
+      puts ""
+      puts "ADDING BASIC INFO FOR:"
 
       doc[:players].map do |player|
         player = player.css('td')
@@ -50,7 +65,7 @@ namespace :db do
         experience = player[6].text
         college = player[7].text
         
-        team.players.create(
+        player = team.players.create(
           br_id: br_id,
           name: name,
           number: number,
@@ -62,7 +77,18 @@ namespace :db do
           experience: experience,
           college: college
         )
+
+        puts "#{player.name}"
+        basic_info[:added] += 1
       end
+
+
+      stats = {
+        added: 0
+      }
+
+      puts ""
+      puts "ADDING SEASON TOTALS FOR:"
 
       doc[:stats].map do |player|
         stat = player.css('td')
@@ -136,14 +162,130 @@ namespace :db do
           pf: pf,
           pts: pts,
         )
+        puts "#{player.name}"
+        stats[:added] += 1
       end
+
+      advs = {
+        added: 0
+      }
+
+      puts ""
+      puts "ADDING ADVANCED STATS FOR:"
+
+      doc[:advs].map do |player|
+        advanced_info = player.css('td')
+
+        href = advanced_info[1].css('a').attr("href").value
+        br_id = href.slice(11..(href.index('.')-1))
+
+        player = team.players.find_by(br_id: br_id)
+
+        per = advanced_info[5].text
+        ts_pct = advanced_info[6].text
+        efg_pct = advanced_info[7].text
+        ft_ar = advanced_info[8].text
+        three_ar = advanced_info[9].text
+
+        orb_pct = advanced_info[10].text
+        drb_pct = advanced_info[11].text
+        trb_pct = advanced_info[12].text
+        ast_pct = advanced_info[13].text
+        stl_pct = advanced_info[14].text
+
+        blk_pct = advanced_info[15].text
+        tov_pct = advanced_info[16].text
+        usg_pct = advanced_info[17].text
+        o_rtg = advanced_info[18].text
+        d_rtg = advanced_info[19].text
+
+        ows = advanced_info[20].text
+        dws = advanced_info[21].text
+        ws = advanced_info[22].text
+        ws_48 = advanced_info[23].text
+
+        boy = player.advs.create(
+          br_id: br_id,
+          per: per,
+          ts_pct: ts_pct, 
+          efg_pct: efg_pct,
+
+          ft_ar: ft_ar,
+          three_ar: three_ar,
+          orb_pct: orb_pct,
+          drb_pct: drb_pct,
+
+          trb_pct: trb_pct,
+          ast_pct: ast_pct,
+          stl_pct: stl_pct,
+          blk_pct: blk_pct,
+
+          tov_pct: tov_pct,
+          usg_pct: usg_pct,
+          o_rtg: o_rtg,
+          d_rtg: d_rtg,
+
+          ows: ows,
+          dws: dws,
+          ws: ws,
+          ws_48: ws_48
+        )
+        
+        puts "#{player.name}"
+        advs[:added] += 1
+      end
+
+
+      @salary = {
+        added: 0,
+        updated: 0
+      }
+
+      puts ""
+
+      doc[:salaries].map do |player|
+
+        salary_info = player.css('td')
+
+        href = salary_info[1].css('a').attr("href").value
+        br_id = href.slice(11..(href.index('.')-1))
+
+        player = team.players.find_by(br_id: br_id)
+
+        name = salary_info[1].css('a').text
+        salary = salary_info[2].attr("csk").to_i
+
+
+        if player.nil?
+          player = team.players.create(
+            br_id: br_id,
+            name: name,
+            salary: salary
+          )
+
+          puts "CREATED PLAYER SALARY FOR: #{player.name}"
+          @salary[:added] += 1
+
+        else
+          player.name = name
+          player.salary = salary
+          player.save
+          puts "ADDED SALARY FOR: #{player.name}"
+          @salary[:updated] += 1
+        end
+      end
+
+      puts ""
+      puts "PLAYERS BASIC INFO ADDED: #{basic_info[:added]}"
+      puts "SEASON TOTALS ADDED: #{stats[:added]}"
+      puts "ADVANCED STATS ADDED: #{advs[:added]}"
+      puts ""
+      puts "JUST PLAYER SALARY ADDED: #{@salary[:added]}"
+      puts "PLAYERS UPDATED WITH SALARY INFO: #{@salary[:updated]}"
+
     else
+        puts ""
         puts "TEAM IS ALREADY IN THE DATABASE. THE INFO WILL NOT BE ADDED"
     end
-
-
-
-
-
   end
 end
