@@ -47,7 +47,7 @@ namespace :db do
       }
 
       puts ""
-      puts "ADDING BASIC INFO FOR:"
+      puts "ADDED BASIC INFO FOR:"
 
       doc[:players].map do |player|
         player = player.css('td')
@@ -88,7 +88,7 @@ namespace :db do
       }
 
       puts ""
-      puts "ADDING SEASON TOTALS FOR:"
+      puts "ADDED SEASON TOTALS FOR:"
 
       doc[:stats].map do |player|
         stat = player.css('td')
@@ -171,7 +171,7 @@ namespace :db do
       }
 
       puts ""
-      puts "ADDING ADVANCED STATS FOR:"
+      puts "ADDED ADVANCED STATS FOR:"
 
       doc[:advs].map do |player|
         advanced_info = player.css('td')
