@@ -19,7 +19,7 @@ namespace :db do
 
     # XXXXXXXXXXXXXXXXX PERSIST TEAM XXXXXXXXXXXXXXXXX
 
-    br_id = 16
+    br_id = 10
 
     teams = 
       [ "ATL", "BOS", "NJN", "CHA", "CHI", "CLE", "DAL", "DEN", 
