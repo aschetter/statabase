@@ -16,6 +16,14 @@ class CreatePlayers < ActiveRecord::Migration
       t.string  :experience
       t.string  :college
 
+
+
+
+
+
+
+      t.belongs_to :team
+
       t.timestamps
     end
   end

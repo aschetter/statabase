@@ -40,8 +40,6 @@ ActiveRecord::Schema.define(version: 20140802062446) do
   end
 
   create_table "memberships", force: true do |t|
-    t.integer  "player_id"
-    t.integer  "team_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -57,6 +55,7 @@ ActiveRecord::Schema.define(version: 20140802062446) do
     t.string   "birth_date"
     t.string   "experience"
     t.string   "college"
+    t.integer  "team_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

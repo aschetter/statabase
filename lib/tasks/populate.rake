@@ -19,7 +19,7 @@ namespace :db do
 
     # XXXXXXXXXXXXXXXXX PERSIST TEAM XXXXXXXXXXXXXXXXX
 
-    br_id = 10
+    br_id = 27
 
     teams = 
       [ "ATL", "BOS", "NJN", "CHA", "CHI", "CLE", "DAL", "DEN", 
@@ -129,7 +129,7 @@ namespace :db do
         pf = stat[25].text
         pts = stat[26].text
         
-        player.stats.create(
+        player.create_stat(
           br_id: br_id,
           age: age,
           gp: gp,
@@ -159,7 +159,7 @@ namespace :db do
           stl: stl,
           blk: blk,
           tov: tov,
-          pf: pf,
+          pf:  pf,
           pts: pts,
         )
         puts "#{player.name}"
@@ -204,7 +204,7 @@ namespace :db do
         ws = advanced_info[22].text
         ws_48 = advanced_info[23].text
 
-        boy = player.advs.create(
+        boy = player.create_adv(
           br_id: br_id,
           per: per,
           ts_pct: ts_pct, 
@@ -235,7 +235,6 @@ namespace :db do
         advs[:added] += 1
       end
 
-
       @salary = {
         added: 0,
         updated: 0
@@ -255,7 +254,6 @@ namespace :db do
 
         name = salary_info[1].css('a').text
         salary = salary_info[2].attr("csk").to_i
-
 
         if player.nil?
           player = team.players.create(
