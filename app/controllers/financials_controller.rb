@@ -24,12 +24,12 @@ class FinancialsController < ApplicationController
       players = team.players.all
       players.each do |player|
         if player.salary.nil?
-          puts "THIS PLAYER DOESN'T HAVE A SALARY FOR THIS TEAM"
+          puts "THIS PLAYER DOESN'T HAVE A SALARY UNDER THIS TEAM"
+          salary = Player.find_by(br_id: player.br_id)
         else
           @team_stats[:salaries][:total] += player.salary.to_i
           @team_stats[:salaries][:players] += 1
         end
-
 
         advs = player.advs
         if advs.first.nil?
@@ -40,6 +40,8 @@ class FinancialsController < ApplicationController
           @team_stats[:win_shares][:total] += ws
           @team_stats[:win_shares][:players] += 1
         end
+
+
       end
     end
 
