@@ -26,7 +26,7 @@ Rails.application.routes.draw do
 # resources :players, only: [:index, :show]
 
 get 'financials/salaries' => 'financials#salaries'
-get 'financials/rois' => 'financials#win_shares'
+get 'financials/win_shares' => 'financials#win_shares'
 
 
 
