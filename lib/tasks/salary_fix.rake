@@ -12,9 +12,14 @@ namespace :db do
       total_salary = 0
       total_games = 0
       player_teams.each do |player_team|
-        total_salary += player_team.salary.to_i
-        total_games += player_team.stat.gp.to_i
-        puts "#{player_team.team.br_id}: gp: #{player_team.stat.gp.to_i}, salary: #{player_team.salary.to_i}"
+
+        if player_team.stat.nil?
+          "NO STAT SHEET FOR THIS PLAYER"
+        else
+          total_salary += player_team.salary.to_i
+          total_games += player_team.stat.gp.to_i
+          puts "#{player_team.team.br_id}: gp: #{player_team.stat.gp.to_i}, salary: #{player_team.salary.to_i}"
+        end
       end
       puts ""
       puts "TOTAL GP: #{total_games}"

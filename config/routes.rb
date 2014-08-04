@@ -9,13 +9,16 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'seasons/:id/players' => 'players#season_index'
+  get 'seasons/:id/players'         => 'players#season_index'
 
-  get 'financials' => 'financials#index'
-  get 'financials/salaries' => 'financials#salaries'
-  get 'financials/win_shares' => 'financials#win_shares'
-  get 'financials/roi' => 'financials#roi'
-  get 'financials/cost_per_point' => 'financials#cost_per_point'
+  get 'financials'                  => 'financials#index'
+  get 'financials/salaries'         => 'financials#salaries'
+  get 'financials/win_shares'       => 'financials#win_shares'
+  get 'financials/roi'              => 'financials#roi'
+  get 'financials/cost_per_point'   => 'financials#cost_per_point'
   get 'financials/cost_per_rebound' => 'financials#cost_per_rebound'
+  get 'financials/cost_per_block'   => 'financials#cost_per_block'
+  get 'financials/cost_per_minute'  => 'financials#cost_per_minute'
+  get 'financials/cost_per_assist'  => 'financials#cost_per_assist'
 
 end

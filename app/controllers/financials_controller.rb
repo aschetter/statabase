@@ -130,7 +130,7 @@ def roi
           pts = player.stat.pts.to_i
           salary = player.salary.to_i
 
-          if salary > 0
+          if pts > 0
             cpp = salary / pts
             response << { name: player.name, salary: salary, team: team.br_id, pts: pts, cpp: cpp }
           else
@@ -140,8 +140,8 @@ def roi
       end
     end
 
-    @roi = response.sort_by { |player| player[:cpp] }.reverse
-    render json: @roi
+    @cpp = response.sort_by { |player| player[:cpp] }.reverse
+    render json: @cpp
   end
 
   def cost_per_rebound
@@ -156,7 +156,7 @@ def roi
           trb = player.stat.trb.to_i
           salary = player.salary.to_i
 
-          if salary > 0
+          if trb > 0
             cpr = salary / trb
             response << { name: player.name, salary: salary, team: team.br_id, trb: trb, cpr: cpr }
           else
@@ -166,7 +166,86 @@ def roi
       end
     end
 
-    @roi = response.sort_by { |player| player[:cpr] }.reverse
-    render json: @roi
+    @cpr = response.sort_by { |player| player[:cpr] }.reverse
+    render json: @cpr
   end
+
+  def cost_per_block
+    response = Array.new
+    players = Season.find(1).teams.all.each do |team|
+      players = team.players.all
+      players.each do |player|
+        stat = player.stat
+        if stat.nil?
+          puts "THIS PLAYER DOESN'T HAVE ADVANCED STATS FOR THE TEAM"
+        else
+          blk = player.stat.blk.to_i
+          salary = player.salary.to_i
+
+          if blk > 0
+            cpb = salary / blk
+            response << { name: player.name, salary: salary, team: team.br_id, blk: blk, cpb: cpb }
+          else
+            response << { name: player.name, team: team.br_id, cpb: 0 }
+          end
+        end
+      end
+    end
+
+    @cpb = response.sort_by { |player| player[:cpb] }.reverse
+    render json: @cpb
+  end
+
+  def cost_per_minute
+    response = Array.new
+    players = Season.find(1).teams.all.each do |team|
+      players = team.players.all
+      players.each do |player|
+        stat = player.stat
+        if stat.nil?
+          puts "THIS PLAYER DOESN'T HAVE ADVANCED STATS FOR THE TEAM"
+        else
+          minutes = player.stat.min.to_i
+          salary = player.salary.to_i
+
+          if minutes > 0
+            cpm = salary / minutes
+            response << { name: player.name, salary: salary, team: team.br_id, minutes: minutes, cpm: cpm }
+          else
+            response << { name: player.name, team: team.br_id, cpm: 0 }
+          end
+        end
+      end
+    end
+
+    @cpm = response.sort_by { |player| player[:cpm] }.reverse
+    render json: @cpm
+  end
+
+  def cost_per_assist
+    response = Array.new
+    players = Season.find(1).teams.all.each do |team|
+      players = team.players.all
+      players.each do |player|
+        stat = player.stat
+        if stat.nil?
+          puts "THIS PLAYER DOESN'T HAVE ADVANCED STATS FOR THE TEAM"
+        else
+          assists = player.stat.ast.to_i
+          salary = player.salary.to_i
+
+          if assists > 0
+            cpa = salary / assists
+            response << { name: player.name, salary: salary, team: team.br_id, assists: assists, cpa: cpa }
+          else
+            response << { name: player.name, team: team.br_id, cpa: 0 }
+          end
+        end
+      end
+    end
+
+    @cpa = response.sort_by { |player| player[:cpa] }.reverse
+    render json: @cpa
+  end
+
 end
