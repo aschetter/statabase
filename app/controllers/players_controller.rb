@@ -1,19 +1,19 @@
 class PlayersController < ApplicationController
 
+  def season_index
+    @players = Season.find(params[:id]).teams.map do |team|
+      team.players
+    end
+    render json: @players
+  end
+
   def index
-    render json: Player.all
+    @players = Team.find(params[:team_id]).players.all
+    render json: @players
   end
 
   def show
-    @player = Player.find(params[:id])
-
-    if @player
-      render json: @player
-    else
-      render status: 404, json: { status: :could_not_find }
-    end
+    @player = Team.find(params[:team_id]).players.find(params[:id])
+    render json: @player
   end
 end
-
-# variable = "Fox"
-# Project.where("project_name like ?", "%#{variable}%")

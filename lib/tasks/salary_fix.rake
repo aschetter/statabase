@@ -1,6 +1,7 @@
 namespace :db do
   task :salary_fix => :environment do
 
+    puts ""
     puts "NORMALIZING SALARY INFO:"
     puts ""
 
@@ -9,18 +10,19 @@ namespace :db do
       puts "#{player.name}"
       player_teams = Player.where(br_id: player.br_id)
       total_salary = 0
-      total_games= 0
+      total_games = 0
       player_teams.each do |player_team|
         total_salary += player_team.salary.to_i
         total_games += player_team.stat.gp.to_i
-        puts "#{player_team.team.br_id}"
-        puts "gp: #{player_team.stat.gp}, salary: #{player_team.salary}"
+        puts "#{player_team.team.br_id}: gp: #{player_team.stat.gp.to_i}, salary: #{player_team.salary.to_i}"
       end
       puts ""
-      puts "gp: #{total_games}, salary: #{total_salary}"
+      puts "TOTAL GP: #{total_games}"
+      puts "TOTAL SALARY: #{total_salary}"
+      puts ""
       player_teams.each do |player_team|
         if total_salary == 0
-          puts "#{player_team.name} HAS NO SALARY LISTED"
+          puts "#{player_team.team.br_id}: NO SALARY LISTED"
           puts ""
         else
           gp_percentage = player_team.stat.gp.to_f / total_games
@@ -28,9 +30,10 @@ namespace :db do
 
           player_team.salary = gp_percentage * total_salary
           player_team.save
-          puts "GAMES ON THIS TEAM #{player_team.stat.gp}"
-          puts "SALARY FOR THIS TEAM: #{player_team.salary}"
-          puts "TOTAL GAMES: #{total_games}"
+          puts "#{player_team.team.br_id}"
+          puts "SALARY: #{player_team.salary}"
+          puts "GAMES: #{player_team.stat.gp}"
+          puts "ALL GAMES: #{total_games}"
           puts "GP PERCENTAGE: #{gp_percentage}"
           puts ""
         end
