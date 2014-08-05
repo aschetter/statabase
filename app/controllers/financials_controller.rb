@@ -116,7 +116,7 @@ def roi
 
   @roi = response.sort_by { |player| player[:roi] }.reverse
   render json: @roi
-  end
+end
 
   def cost_per_point
     response = Array.new

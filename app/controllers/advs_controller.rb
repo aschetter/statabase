@@ -12,13 +12,13 @@ class AdvsController < ApplicationController
     end
   end
 
-  def show
-    if @adv
-      render json: @adv
-    else
-      render status: 404, json: { status: :could_not_find }
-    end
-  end
+  # def show
+  #   if @adv
+  #     render json: @adv
+  #   else
+  #     render status: 404, json: { status: :could_not_find }
+  #   end
+  # end
 
   private
 
@@ -43,6 +43,7 @@ class AdvsController < ApplicationController
     if !@season
       set_season
     end
+
     team_id = params[:team_id].to_i
     if team_id < 1
       begin
@@ -75,7 +76,7 @@ class AdvsController < ApplicationController
       end
     else
       begin
-        @player = @team.players.find(params[:id])
+        @player = @team.players.find(params[:player_id])
       rescue ActiveRecord::RecordNotFound => e
         @player = nil
       end
@@ -99,4 +100,3 @@ class AdvsController < ApplicationController
     end
   end
 end
-

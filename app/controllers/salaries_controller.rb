@@ -3,7 +3,7 @@ class SalariesController < ApplicationController
   before_action :set_team
 
   def index
-    if @season && !@team
+    if @season && !@team && @in_db
       response = Array.new
       players = @season.teams.map do |team| 
         team.players.map do |player| 
@@ -11,14 +11,14 @@ class SalariesController < ApplicationController
         end
       end
 
-      @salaries = response.sort_by { |player| player[:salary].to_i }.reverse
+      @salaries = response.sort_by { |player| player[:salary].to_f }.reverse
       render json: @salaries
 
     elsif @season && @team
       salaries = @team.players.all.map do |player|
         {name: player.name, salary: player.salary}
       end
-      @salaries = salaries.sort_by { |player| player[:salary].to_i }.reverse
+      @salaries = salaries.sort_by { |player| player[:salary].to_f }.reverse
       render json: @salaries
     else
       render status: 404, json: { status: :could_not_find }
@@ -48,6 +48,12 @@ class SalariesController < ApplicationController
     if !@season
       set_season
     end
+
+    total = @season.teams.length
+    if total > params[:team_id].to_i
+      @in_db = true
+    end
+
     team_id = params[:team_id].to_i
     if team_id < 1
       begin

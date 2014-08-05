@@ -12,14 +12,6 @@ class StatsController < ApplicationController
     end
   end
 
-  def show
-    if @stat
-      render json: @stat
-    else
-      render status: 404, json: { status: :could_not_find }
-    end
-  end
-
   private
 
   def set_season
@@ -75,7 +67,7 @@ class StatsController < ApplicationController
       end
     else
       begin
-        @player = @team.players.find(params[:id])
+        @player = @team.players.find(params[:player_id])
       rescue ActiveRecord::RecordNotFound => e
         @player = nil
       end
