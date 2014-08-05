@@ -45,6 +45,8 @@ class CostPerAssistsController < ApplicationController
       end
       @cpa = response.sort_by { |player| player[:cpa].to_f }.reverse
       render json: @cpa
+    # elsif @player
+      
     else
       render status: 404, json: { status: :could_not_find }
     end

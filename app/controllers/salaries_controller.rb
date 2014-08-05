@@ -1,6 +1,7 @@
 class SalariesController < ApplicationController
   before_action :set_season
   before_action :set_team
+  before_action :set_player
 
   def index
     if @season && !@team && @in_db
@@ -14,12 +15,21 @@ class SalariesController < ApplicationController
       @salaries = response.sort_by { |player| player[:salary].to_f }.reverse
       render json: @salaries
 
-    elsif @season && @team
+    elsif @season && @team && !@player
       salaries = @team.players.all.map do |player|
         {name: player.name, salary: player.salary}
       end
       @salaries = salaries.sort_by { |player| player[:salary].to_f }.reverse
       render json: @salaries
+    elsif @player
+      salary = @player.salary
+
+      if salary
+        @salary = { name: @player.name, salary: @player.salary }
+      else
+        @salary = { name: @player.name, salary: "null" }
+      end
+      render json: @salary
     else
       render status: 404, json: { status: :could_not_find }
     end
@@ -66,6 +76,29 @@ class SalariesController < ApplicationController
         @team = @season.teams.find(params[:team_id])
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
+      end
+    end
+  end
+
+  def set_player
+    if !@season
+      set_season
+    end
+    if !@team
+      set_team
+    end
+    player_id = params[:player_id].to_i
+    if player_id < 1
+      begin
+        @player = @team.players.find_by(name: params[:player_id])
+      rescue ActiveRecord::RecordNotFound => e
+        @player = nil
+      end
+    else
+      begin
+        @player = @team.players.find(params[:player_id])
+      rescue ActiveRecord::RecordNotFound => e
+        @player = nil
       end
     end
   end
