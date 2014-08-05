@@ -1,14 +1,17 @@
 Rails.application.routes.draw do
 
   resources :seasons, only: [:index, :show] do
-    resources :players, only: [:index, :show]
     resources :teams, only: [:index, :show] do
       resources :players, only: [:index, :show] do
-      resources :advs, only: [:index, :show]
-      resources :stats, only: [:index, :show]
+        resources :advs, only: [:index, :show]
+        resources :stats, only: [:index, :show]
       end
     end
   end
+
+  
+
+  
 
   get 'financials'                  => 'financials#index'
   get 'financials/salaries'         => 'financials#salaries'

@@ -1,4 +1,5 @@
 class SeasonsController < ApplicationController
+  before_action :set_season
 
   def index
     @seasons = Season.all
@@ -6,8 +7,6 @@ class SeasonsController < ApplicationController
   end
 
   def show
-    @season = Season.find(params[:id])
-
     if @season
       render json: @season
     else
@@ -15,4 +14,13 @@ class SeasonsController < ApplicationController
     end
   end
 
+  private
+
+  def set_season
+    begin
+      @season = Season.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      @season = nil
+    end
+  end
 end
