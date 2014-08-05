@@ -21,7 +21,6 @@ class SeasonsController < ApplicationController
     if season_id > 1900
       begin
         @season = Season.find_by(year: season_id)
-        puts "TRY HERE"
       rescue ActiveRecord::RecordNotFound => e
         @season = nil
       end
