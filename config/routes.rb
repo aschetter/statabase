@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   resources :seasons, only: [:index, :show] do
+    resources :players, only: [:index, :show]
     resources :teams, only: [:index, :show] do
       resources :players, only: [:index, :show] do
       resources :advs, only: [:index, :show]
@@ -8,8 +9,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  get 'seasons/:id/players'         => 'players#season_index'
 
   get 'financials'                  => 'financials#index'
   get 'financials/salaries'         => 'financials#salaries'
@@ -20,5 +19,7 @@ Rails.application.routes.draw do
   get 'financials/cost_per_block'   => 'financials#cost_per_block'
   get 'financials/cost_per_minute'  => 'financials#cost_per_minute'
   get 'financials/cost_per_assist'  => 'financials#cost_per_assist'
+
+  get 'financials/salaries/teams/'  => 'financials#team_salaries'
 
 end

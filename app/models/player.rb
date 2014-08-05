@@ -4,15 +4,5 @@ class Player < ActiveRecord::Base
 
   has_one :adv
   has_one :stat
-
-
-
-
-
-
-
-
-
-  
   belongs_to :team
 end

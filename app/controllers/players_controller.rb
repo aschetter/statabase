@@ -1,14 +1,14 @@
 class PlayersController < ApplicationController
 
-  def season_index
-    @players = Season.find(params[:id]).teams.map do |team|
-      team.players
-    end
-    render json: @players
-  end
-
   def index
-    @players = Team.find(params[:team_id]).players.all
+    if !params[:team_id]
+      @players = Season.find(params[:season_id]).teams.map do |team|
+        team.players
+      end
+    else
+      @players = Team.find(params[:team_id]).players.all
+    end
+
     render json: @players
   end
 

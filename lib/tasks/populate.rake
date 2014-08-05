@@ -19,12 +19,12 @@ namespace :db do
 
     # XXXXXXXXXXXXXXXXX PERSIST TEAM XXXXXXXXXXXXXXXXX
 
-    br_id = 7
+    br_id = 27
 
     teams = 
       [ "ATL", "BOS", "NJN", "CHA", "CHI", "CLE", "DAL", "DEN", 
         "DET", "GSW", "HOU", "IND", "LAC", "LAL", "MEM", "MIA", 
-        "MIL", "MIN", "NOH", "NYK", "OKC", "ORL", "PHI", "PHO", 
+        "MIL", "MIN", "NOP", "NYK", "OKC", "ORL", "PHI", "PHO", 
         "POR", "SAC", "SAS", "TOR", "UTA", "WAS" ]
     
     team = season.teams.find_by(br_id: teams[br_id])

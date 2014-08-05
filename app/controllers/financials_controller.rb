@@ -63,7 +63,7 @@ class FinancialsController < ApplicationController
       players = team.players.all
       players.each do |player|
         player_salary = player.salary.to_i
-        response << { name: player.name, salary: player.salary }
+        response << { name: player.name, team: team.br_id, salary: player.salary }
       end
     end
 
@@ -246,6 +246,9 @@ def roi
 
     @cpa = response.sort_by { |player| player[:cpa] }.reverse
     render json: @cpa
+  end
+
+  def team_salaries
   end
 
 end
