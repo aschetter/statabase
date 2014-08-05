@@ -1,7 +1,7 @@
 class FinancialsController < ApplicationController
 
   def index
-    @team_stats = {
+    @stats = {
       players: 0,
       salaries: {
                   total: 0,
@@ -23,38 +23,38 @@ class FinancialsController < ApplicationController
         salary = player.salary
 
         if adv && salary.to_i > 0
-          @team_stats[:salaries][:total] += player.salary
+          @stats[:salaries][:total] += player.salary
 
           ws = adv.ws
           ws = ( ws * 100 ).round / 100.0
-          @team_stats[:win_shares][:total] += ws
+          @stats[:win_shares][:total] += ws
 
-          @team_stats[:players] += 1
+          @stats[:players] += 1
         end
       end
     end
 
-    players = @team_stats[:players]
+    players = @stats[:players]
 
-    salaries = @team_stats[:salaries][:total]
+    salaries = @stats[:salaries][:total]
     average_salary = salaries / players
-    @team_stats[:salaries][:average] = average_salary
+    @stats[:salaries][:average] = average_salary
 
-    win_shares = @team_stats[:win_shares][:total]
+    win_shares = @stats[:win_shares][:total]
     average_win_shares = win_shares / players
     average_win_shares = (average_win_shares * 100).round / 100.0
-    @team_stats[:win_shares][:average] = average_win_shares
+    @stats[:win_shares][:average] = average_win_shares
 
     roi_average = average_win_shares / average_salary
     roi_average *= 1000000
     roi_average = (roi_average * 100).round / 100.0
 
     win_shares = (win_shares * 100).round / 100.0
-    @team_stats[:win_shares][:total] = win_shares
+    @stats[:win_shares][:total] = win_shares
 
-    @team_stats[:roi][:average] = roi_average
+    @stats[:roi][:average] = roi_average
 
-    render json: @team_stats
+    render json: @stats
   end
 
   def salaries
@@ -247,8 +247,4 @@ def roi
     @cpa = response.sort_by { |player| player[:cpa] }.reverse
     render json: @cpa
   end
-
-  def team_salaries
-  end
-
 end
