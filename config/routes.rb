@@ -2,9 +2,13 @@ Rails.application.routes.draw do
 
   resources :seasons, only: [:index, :show] do
     resources :salaries, only: [:index]
+    resources :win_shares, only: [:index]
     resources :teams, only: [:index, :show] do
+
       resources :salaries, only: [:index]
+      resources :win_shares, only: [:index]
       resources :players, only: [:index, :show] do
+        
         resources :advs, only: [:index, :show]
         resources :stats, only: [:index, :show]
       end

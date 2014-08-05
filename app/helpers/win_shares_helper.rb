@@ -1,0 +1,2 @@
+module WinSharesHelper
+end
