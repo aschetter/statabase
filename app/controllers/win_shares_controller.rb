@@ -3,7 +3,7 @@ class WinSharesController < ApplicationController
   before_action :set_team
 
   def index
-    if @season && !@team
+    if @season && !@team && @in_db
       response = Array.new
       players = @season.teams.map do |team| 
         team.players.map do |player|
@@ -17,14 +17,20 @@ class WinSharesController < ApplicationController
         end
       end
 
-      @ws = response.sort_by { |player| player[:ws].to_i }.reverse
+      @ws = response.sort_by { |player| player[:ws].to_f }.reverse
       render json: @ws
 
     elsif @season && @team
       ws = @team.players.all.map do |player|
-        {name: player.name, ws: player.adv.ws }
+        adv = player.adv
+
+        if adv
+          { name: player.name, ws: player.adv.ws }
+        else
+          { name: player.name, ws: "null" }
+        end
       end
-      @ws = ws.sort_by { |player| player[:ws].to_i }.reverse
+      @ws = ws.sort_by { |player| player[:ws].to_f }.reverse
       render json: @ws
     else
       render status: 404, json: { status: :could_not_find }
@@ -54,6 +60,12 @@ class WinSharesController < ApplicationController
     if !@season
       set_season
     end
+
+    total = @season.teams.length
+    if total > params[:team_id].to_i
+      @in_db = true
+    end
+
     team_id = params[:team_id].to_i
     if team_id < 1
       begin
