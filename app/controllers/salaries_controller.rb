@@ -87,6 +87,10 @@ class SalariesController < ApplicationController
     if !@team
       set_team
     end
+    if !@team
+      return
+    end
+    
     player_id = params[:player_id].to_i
     if player_id < 1
       begin

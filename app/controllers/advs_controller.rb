@@ -12,14 +12,6 @@ class AdvsController < ApplicationController
     end
   end
 
-  # def show
-  #   if @adv
-  #     render json: @adv
-  #   else
-  #     render status: 404, json: { status: :could_not_find }
-  #   end
-  # end
-
   private
 
   def set_season

@@ -1,6 +1,7 @@
 class RoisController < ApplicationController
   before_action :set_season
   before_action :set_team
+  before_action :set_player
 
   def index
     if @season && !@team && @in_db
@@ -28,7 +29,7 @@ class RoisController < ApplicationController
       @roi = response.sort_by { |player| player[:roi].to_f }.reverse
       render json: @roi
 
-    elsif @season && @team
+    elsif @season && @team && !@player
       response = Array.new
       ws = @team.players.all.map do |player|
         adv = player.adv
@@ -49,6 +50,23 @@ class RoisController < ApplicationController
       end
 
       @roi = response.sort_by { |player| player[:roi].to_f }.reverse
+      render json: @roi
+    elsif @player
+      adv = @player.adv
+
+      if adv
+        ws = @player.adv.ws.to_f
+        salary = @player.salary.to_i
+
+        if salary > 0
+          roi = ws / salary
+          roi *= 1000000
+          roi = (roi * 100).round / 100.0
+           @roi = { name: @player.name, salary: salary, ws: ws, roi: roi}
+        end
+      else
+         @roi = { name: @player.name, salary: salary, ws: ws, roi: "null" }
+      end
       render json: @roi
     else
       render status: 404, json: { status: :could_not_find }
@@ -96,6 +114,32 @@ class RoisController < ApplicationController
         @team = @season.teams.find(params[:team_id])
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
+      end
+    end
+  end
+
+  def set_player
+    if !@season
+      set_season
+    end
+    if !@team
+      set_team
+    end
+    if !@team
+      return
+    end
+    player_id = params[:player_id].to_i
+    if player_id < 1
+      begin
+        @player = @team.players.find_by(name: params[:player_id])
+      rescue ActiveRecord::RecordNotFound => e
+        @player = nil
+      end
+    else
+      begin
+        @player = @team.players.find(params[:player_id])
+      rescue ActiveRecord::RecordNotFound => e
+        @player = nil
       end
     end
   end

@@ -1,6 +1,7 @@
 class CostPerPointsController < ApplicationController
   before_action :set_season
   before_action :set_team
+  before_action :set_player
 
   def index
     if @season && !@team && @in_db
@@ -26,7 +27,7 @@ class CostPerPointsController < ApplicationController
       @cpp = response.sort_by { |player| player[:cpp].to_f }.reverse
       render json: @cpp
 
-    elsif @season && @team
+    elsif @season && @team && !@player
       response = Array.new
       cpp = @team.players.all.map do |player|
         stat = player.stat
@@ -44,6 +45,21 @@ class CostPerPointsController < ApplicationController
         end
       end
       @cpp = response.sort_by { |player| player[:cpp].to_f }.reverse
+      render json: @cpp
+    elsif @player
+      stat = @player.stat
+
+      if stat
+        pts = @player.stat.pts.to_i
+        salary = @player.salary.to_i
+
+        if pts > 0
+          cpp = salary / pts
+          @cpp = { name: @player.name, salary: salary, pts: pts, cpp: cpp }
+        else
+          @cpp = { name: @player.name, cpp: "null" }
+        end
+      end
       render json: @cpp
     else
       render status: 404, json: { status: :could_not_find }
@@ -91,6 +107,33 @@ class CostPerPointsController < ApplicationController
         @team = @season.teams.find(params[:team_id])
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
+      end
+    end
+  end
+
+  def set_player
+    if !@season
+      set_season
+    end
+    if !@team
+      set_team
+    end
+    if !@team
+      return
+    end
+    
+    player_id = params[:player_id].to_i
+    if player_id < 1
+      begin
+        @player = @team.players.find_by(name: params[:player_id])
+      rescue ActiveRecord::RecordNotFound => e
+        @player = nil
+      end
+    else
+      begin
+        @player = @team.players.find(params[:player_id])
+      rescue ActiveRecord::RecordNotFound => e
+        @player = nil
       end
     end
   end
