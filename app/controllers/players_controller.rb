@@ -4,7 +4,7 @@ class PlayersController < ApplicationController
   before_action :set_player
 
   def index
-    if @season && @team
+    if @team
       @players = @team.players.all
       render json: @players
     else
@@ -23,10 +23,19 @@ class PlayersController < ApplicationController
   private
 
   def set_season
-    begin
-      @season = Season.find(params[:season_id])
-    rescue ActiveRecord::RecordNotFound => e
-      @season = nil
+    season_id = params[:season_id].to_i
+    if season_id > 1900
+      begin
+        @season = Season.find_by(year: season_id)
+      rescue ActiveRecord::RecordNotFound => e
+        @season = nil
+      end
+    else
+      begin
+        @season = Season.find(params[:season_id])
+      rescue ActiveRecord::RecordNotFound => e
+        @season = nil
+      end
     end
   end
 
@@ -34,10 +43,19 @@ class PlayersController < ApplicationController
     if !@season
       set_season
     end
-    begin
-      @team = @season.teams.find(params[:team_id])
-    rescue ActiveRecord::RecordNotFound => e
-      @team = nil
+    team_id = params[:team_id].to_i
+    if team_id < 1
+      begin
+        @team = @season.teams.find_by(br_id: params[:team_id])
+      rescue ActiveRecord::RecordNotFound => e
+        @team = nil
+      end
+    else
+      begin
+        @team = @season.teams.find(params[:team_id])
+      rescue ActiveRecord::RecordNotFound => e
+        @team = nil
+      end
     end
   end
 
@@ -48,10 +66,19 @@ class PlayersController < ApplicationController
     if !@team
       set_team
     end
-    begin
-      @player = @team.players.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      @player = nil
+    player_id = params[:id].to_i
+    if player_id < 1
+      begin
+        @player = @team.players.find_by(name: params[:id])
+      rescue ActiveRecord::RecordNotFound => e
+        @player = nil
+      end
+    else
+      begin
+        @player = @team.players.find(params[:id])
+      rescue ActiveRecord::RecordNotFound => e
+        @player = nil
+      end
     end
   end
 end

@@ -17,10 +17,20 @@ class SeasonsController < ApplicationController
   private
 
   def set_season
-    begin
-      @season = Season.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      @season = nil
+    season_id = params[:id].to_i
+    if season_id > 1900
+      begin
+        @season = Season.find_by(year: season_id)
+        puts "TRY HERE"
+      rescue ActiveRecord::RecordNotFound => e
+        @season = nil
+      end
+    else
+      begin
+        @season = Season.find(params[:id])
+      rescue ActiveRecord::RecordNotFound => e
+        @season = nil
+      end
     end
   end
 end

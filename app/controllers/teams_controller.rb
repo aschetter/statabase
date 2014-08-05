@@ -22,10 +22,19 @@ class TeamsController < ApplicationController
   private
 
   def set_season
-    begin
-      @season = Season.find(params[:season_id])
-    rescue ActiveRecord::RecordNotFound => e
-      @season = nil
+    season_id = params[:season_id].to_i
+    if season_id > 1900
+      begin
+        @season = Season.find_by(year: season_id)
+      rescue ActiveRecord::RecordNotFound => e
+        @season = nil
+      end
+    else
+      begin
+        @season = Season.find(params[:season_id])
+      rescue ActiveRecord::RecordNotFound => e
+        @season = nil
+      end
     end
   end
 
@@ -33,10 +42,19 @@ class TeamsController < ApplicationController
     if !@season
       set_season
     end
-    begin
-      @team = Season.find(params[:season_id]).teams.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      @team = nil
+    team_id = params[:id].to_i
+    if team_id < 1
+      begin
+        @team = @season.teams.find_by(br_id: params[:id])
+      rescue ActiveRecord::RecordNotFound => e
+        @team = nil
+      end
+    else
+      begin
+        @team = @season.teams.find(params[:id])
+      rescue ActiveRecord::RecordNotFound => e
+        @team = nil
+      end
     end
   end
 end
