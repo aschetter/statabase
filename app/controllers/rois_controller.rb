@@ -62,7 +62,9 @@ class RoisController < ApplicationController
           roi = ws / salary
           roi *= 1000000
           roi = (roi * 100).round / 100.0
-           @roi = { name: @player.name, salary: salary, ws: ws, roi: roi}
+          @roi = { name: @player.name, salary: salary, ws: ws, roi: roi }
+        else
+          @roi = { name: @player.name, salary: salary, ws: ws, roi: "null" }
         end
       else
          @roi = { name: @player.name, salary: salary, ws: ws, roi: "null" }

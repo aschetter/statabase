@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   resources :seasons, only: [:index, :show] do
+
     resources :salaries, only: [:index]
     resources :win_shares, only: [:index]
     resources :rois, only: [:index]
