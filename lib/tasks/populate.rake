@@ -27,6 +27,7 @@ namespace :db do
         "MIL", "MIN", "NOP", "NYK", "OKC", "ORL", "PHI", "PHO", 
         "POR", "SAC", "SAS", "TOR", "UTA", "WAS" ]
     
+    # teams = %w[ATL BOS BRK CHA]
     team = season.teams.find_by(br_id: teams[br_id])
 
     if team.nil?
@@ -41,7 +42,7 @@ namespace :db do
       }
 
       doc = StatLoader::LoadPage.run(attrs)
-
+      
       basic_info = {
         added: 0
       }
