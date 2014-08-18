@@ -4,56 +4,64 @@ namespace :db do
   desc "Erase and fill database"
   task :populate => :environment do
 
-    # XXXXXXXXXXXXXXXXX PERSIST SEASON XXXXXXXXXXXXXXXXX
+    # XXXXXXXXXXXXXXXXX CREATE SEASON XXXXXXXXXXXXXXXXX
 
-    year   = 2014
+    year = 2014
 
-    season = Season.find_by(year: year)
+    @db_season = Season.find_by(year: year)
 
-    if season.nil?
-      season = Season.create(year: year)
+    if @db_season.nil?
+      @db_season = Season.create(year: year)
       puts ""
-      puts "ADDED TO THE DATABASE: #{season.year}"
+      puts "ADDED TO THE DATABASE: #{@db_season.year}"
+    else
       puts ""
+      puts "#{@db_season.year} IS ALREADY IN THE DATABASE."
     end
 
-    # XXXXXXXXXXXXXXXXX PERSIST TEAM XXXXXXXXXXXXXXXXX
+    # XXXXXXXXXXXXXXXXX CREATE TEAM XXXXXXXXXXXXXXXXX
 
-    # br_id corresponds to unique team id in the online database
+    # br_id corresponds to unique team ID in the online database
 
-    br_id = 17
+    br_id = 28
 
     teams = %w[ ATL BOS BRK CHA CHI CLE DAL DEN DET GSW 
                 HOU IND LAC LAL MEM MIA MIL MIN NOP NYK
                 OKC ORL PHI PHO POR SAC SAS TOR UTA WAS ]
     
-    team = Team.find_by(br_id: teams[br_id])
+    @db_team = Team.find_by(br_id: teams[br_id])
 
-    # if team.nil?
-       
-      team = Team.create(br_id: teams[br_id])
-      SeasonTeam.create(season_id: season.id, team_id: team.id)
-
+    if @db_team.nil?
+      @db_team = Team.create(br_id: teams[br_id])
       puts ""
-      puts "ADDED TO THE DATABASE: #{team.br_id}"
+      puts "ADDED TO THE DATABASE: #{@db_team.br_id}"
+    else
+      puts ""
+      puts "#{@db_team.br_id} IS ALREADY IN THE DATABASE."
+    end
+
+    # XXXXXXXXXXXXXXXXX CREATE SEASON TEAM XXXXXXXXXXXXXXXXX
+
+    @db_season_team = SeasonTeam.find_by(season_id: @db_season[:id], team_id: @db_team[:id])
+
+    if @db_season_team.nil?
+      @db_season_team = SeasonTeam.create(season_id: @db_season[:id], team_id: @db_team[:id])
+    end
+
+    # XXXXXXXXXXXXXXXXX LOAD TEAM STAT PAGE XXXXXXXXXXXXXXXXX
 
       attrs = {
-          season: season,
-          team: team
+          season: @db_season,
+          team: @db_team
       }
 
       doc = StatLoader::LoadPage.run(attrs)
-      
-      basic_info = {
-        added: 0
-      }
 
-      puts ""
-      puts "ADDED BASIC INFO FOR:"
+    # XXXXXXXXXXXXXXXXX PARSE PLAYER BIOS XXXXXXXXXXXXXXXXX
 
       players = doc[:players]
 
-      @team_bios = []
+      player_bios = []
 
       players.each do |player|
         player = player.css('td')
@@ -72,116 +80,163 @@ namespace :db do
           college: player[7].text,
         }
 
-        @team_bios << player_bio
+        player_bios << player_bio
       end
 
-      @team_bios.each do |player|
+    # XXXXXXXXXXXXXXXXX CREATE PLAYER BIOS XXXXXXXXXXXXXXXXX
 
-        entry = Player.create(
-          br_id: player[:br_id],
-          name: player[:name],
-          number: player[:number],
-          position: player[:position],
+      basic_info = {
+        added: 0,
+        already_in_db: 0
+      }
 
-          height: player[:height],
-          weight: player[:weight],
-          birth_date: player[:birth_date],
-          experience: player[:experience],
-          college: player[:college]
-        )
+      team_players = {
+        added: [],
+        in_db: []
+      }
 
-        puts "#{entry.name}"
-        basic_info[:added] += 1
+      player_bios.each do |player|
+
+        @db_player = Player.find_by(br_id: player[:br_id])
+
+        if @db_player.nil?
+
+          @db_player = Player.create(
+            br_id: player[:br_id],
+            name: player[:name],
+            number: player[:number],
+            position: player[:position],
+
+            height: player[:height],
+            weight: player[:weight],
+            birth_date: player[:birth_date],
+            experience: player[:experience],
+            college: player[:college]
+          )
+
+          basic_info[:added] += 1
+          team_players[:added] << @db_player
+
+        else
+
+          basic_info[:already_in_db] += 1
+          team_players[:in_db] << @db_player
+        end
       end
 
-      # players.map do |player|
-      #   Membership.create(team_id: team.id, player_id: player.id)
-      # end
+      puts ""
+      puts "ADDED BASIC INFO FOR:"
 
-    #   stats = {
-    #     added: 0
-    #   }
+      team_players[:added].each do |player|
+        puts player.name
+      end
 
-    #   puts ""
-    #   puts "ADDED SEASON TOTALS FOR:"
+      puts ""
+      puts "THESE PLAYERS WERE ALREADY IN THE DB:"
 
-    #   stats = doc[:stats]
+      team_players[:in_db].each do |player|
+        puts player.name
+      end
 
-    #   stats.map do |player|
-    #     stat = player.css('td')
+      ###################################################### CREATE PLAYER MEMBERSHIP ###########
 
-    #     href = stat[1].css('a').attr("href").value
-    #     br_id = href.slice(11..(href.index('.')-1))
+      puts ""
+      puts "THE #{@db_season.year} #{@db_team.br_id} ADDED THE FOLLOWING PLAYERS TO ITS ROSTER:"
 
-    #     stats = Membership.stat
+      team_players[:added].each do |player|
+        Membership.create(player_id: player.id, team_id: @db_team[:id], season_id: @db_season[:id])
+        puts player.name
+      end
 
-    #     age = stat[2].text.to_i
-    #     gp = stat[3].text.to_i
-    #     gs = stat[4].text.to_i
-    #     min = stat[5].text
+      team_players[:in_db].each do |player|
+        Membership.create(player_id: player.id, team_id: @db_team[:id], season_id: @db_season[:id])
+        puts player.name
+      end
 
-    #     fg_made = stat[6].text
-    #     fg_att = stat[7].text
-    #     fg_pct = stat[8].text
-    #     three_made = stat[9].text
+      # stats = {
+      #   added: 0
+      # }
 
-    #     three_att = stat[10].text
-    #     three_pct = stat[11].text
-    #     two_made = stat[12].text
-    #     two_att = stat[13].text
+      # puts ""
+      # puts "ADDED SEASON TOTALS FOR:"
 
-    #     two_pct = stat[14].text
-    #     ft_made = stat[15].text
-    #     ft_att = stat[16].text
-    #     ft_pct = stat[17].text
+      # stats = doc[:stats]
 
-    #     orb = stat[18].text
-    #     drb = stat[19].text
-    #     trb = stat[20].text
-    #     ast = stat[21].text
+      # stats.map do |player|
+      #   stat = player.css('td')
 
-    #     stl = stat[22].text
-    #     blk = stat[23].text
-    #     tov = stat[24].text
-    #     pf = stat[25].text
-    #     pts = stat[26].text
+      #   href = stat[1].css('a').attr("href").value
+      #   br_id = href.slice(11..(href.index('.')-1))
+
+      #   stats = Membership.stat
+
+      #   age = stat[2].text.to_i
+      #   gp = stat[3].text.to_i
+      #   gs = stat[4].text.to_i
+      #   min = stat[5].text
+
+      #   fg_made = stat[6].text
+      #   fg_att = stat[7].text
+      #   fg_pct = stat[8].text
+      #   three_made = stat[9].text
+
+      #   three_att = stat[10].text
+      #   three_pct = stat[11].text
+      #   two_made = stat[12].text
+      #   two_att = stat[13].text
+
+      #   two_pct = stat[14].text
+      #   ft_made = stat[15].text
+      #   ft_att = stat[16].text
+      #   ft_pct = stat[17].text
+
+      #   orb = stat[18].text
+      #   drb = stat[19].text
+      #   trb = stat[20].text
+      #   ast = stat[21].text
+
+      #   stl = stat[22].text
+      #   blk = stat[23].text
+      #   tov = stat[24].text
+      #   pf = stat[25].text
+      #   pts = stat[26].text
         
-    #     player.create_stat(
-    #       br_id: br_id,
-    #       age: age,
-    #       gp: gp,
-    #       gs: gs,
-    #       min: min,
+      #   player.create_stat(
+      #     br_id: br_id,
+      #     age: age,
+      #     gp: gp,
+      #     gs: gs,
+      #     min: min,
 
-    #       fg_made: fg_made,
-    #       fg_att: fg_att,
-    #       fg_pct: fg_pct,
-    #       three_made: three_made,
+      #     fg_made: fg_made,
+      #     fg_att: fg_att,
+      #     fg_pct: fg_pct,
+      #     three_made: three_made,
 
-    #       three_att: three_att,
-    #       three_pct: three_pct,
-    #       two_made: two_made,
-    #       two_att: two_att,
+      #     three_att: three_att,
+      #     three_pct: three_pct,
+      #     two_made: two_made,
+      #     two_att: two_att,
 
-    #       two_pct: two_pct,
-    #       ft_made: ft_made,
-    #       ft_att: ft_att,
-    #       ft_pct: ft_pct,
+      #     two_pct: two_pct,
+      #     ft_made: ft_made,
+      #     ft_att: ft_att,
+      #     ft_pct: ft_pct,
 
-    #       orb: orb,
-    #       drb: drb,
-    #       trb: trb,
-    #       ast: ast,
+      #     orb: orb,
+      #     drb: drb,
+      #     trb: trb,
+      #     ast: ast,
 
-    #       stl: stl,
-    #       blk: blk,
-    #       tov: tov,
-    #       pf:  pf,
-    #       pts: pts,
-    #     )
-    #     puts "#{player.name}"
-    #     stats[:added] += 1
-    #   end
+      #     stl: stl,
+      #     blk: blk,
+      #     tov: tov,
+      #     pf:  pf,
+      #     pts: pts,
+      #   )
+      #   puts "#{player.name}"
+      #   stats[:added] += 1
+      # end
 
     #   advs = {
     #     added: 0
@@ -312,10 +367,7 @@ namespace :db do
     #   puts "ADVANCED STATS ADDED: #{advs[:added]}"
     #   puts "JUST PLAYER SALARY ADDED: #{@salary[:added]}"
     #   puts "PLAYERS UPDATED WITH SALARY INFO: #{@salary[:updated]}"
+      
 
-    # else
-    #     puts ""
-    #     puts "TEAM IS ALREADY IN THE DATABASE. THE INFO WILL NOT BE ADDED"
-    # end
   end
 end
