@@ -18,7 +18,6 @@ ActiveRecord::Schema.define(version: 20140802062446) do
 
   create_table "advs", force: true do |t|
     t.integer  "membership_id"
-    t.string   "br_id"
     t.float    "per"
     t.float    "ts_pct"
     t.float    "efg_pct"

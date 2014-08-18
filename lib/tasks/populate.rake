@@ -153,7 +153,7 @@ namespace :db do
         puts player.name
       end
 
-      # XXXXXXXXXXXXXXXXX CREATE PLAYER STAT LINE XXXXXXXXXXXXXXXXX
+      # XXXXXXXXXXXXXXXXX PARSE PLAYER STAT LINES XXXXXXXXXXXXXXXXX
 
       puts ""
       puts "#{@db_season.year} #{@db_team.br_id} ADDED A STAT LINE FOR THE FOLLOWING PLAYERS:"
@@ -168,7 +168,6 @@ namespace :db do
 
       stats.each do |player|
         stat = player.css('td')
-
         href = stat[1].css('a').attr("href").value
 
         player_statline = {
@@ -208,10 +207,12 @@ namespace :db do
         player_statlines << player_statline
       end
 
-      player_statlines.each do |player|
+      # XXXXXXXXXXXXXXXXX CREATE PLAYER STAT LINES XXXXXXXXXXXXXXXXX
 
+      player_statlines.each do |player|
         db_player = Player.find_by(br_id: player[:br_id])
-        membership = Membership.find_by(season_id: @db_season, team_id: @db_team[:id], player_id: db_player[:id])
+        membership = Membership.find_by(season_id: @db_season[:id], team_id: @db_team[:id], player_id: db_player[:id])
+        
         Stat.create(
           membership_id: membership[:id],
           age: player[:age],
@@ -246,86 +247,92 @@ namespace :db do
           pts: player[:pts],
         )
 
-        puts "#{db_player.name}"
+        puts db_player.name
         statlines[:added] += 1
       end
 
+      # XXXXXXXXXXXXXXXXX PARSE PLAYER ADVANCED STATS XXXXXXXXXXXXXXXXX
 
+      puts ""
+      puts "#{@db_season.year} #{@db_team.br_id} ADDED ADVANCED STATS FOR THE FOLLOWING PLAYERS:"
 
+      advance = {
+        added: 0
+      }
 
+      advs = doc[:advs]
 
+      player_advanceds = []
 
+      advs.each do |player|
+        advanced_info = player.css('td')
+        href = advanced_info[1].css('a').attr("href").value
 
-    #   advs = {
-    #     added: 0
-    #   }
+        player_advanced = {
+          br_id: href.slice(11..(href.index('.')-1)),
+          per: advanced_info[5].text,
+          ts_pct: advanced_info[6].text,
+          efg_pct: advanced_info[7].text,
+          ft_ar: advanced_info[8].text,
+          three_ar: advanced_info[9].text,
 
-    #   puts ""
-    #   puts "ADDED ADVANCED STATS FOR:"
+          orb_pct: advanced_info[10].text,
+          drb_pct: advanced_info[11].text,
+          trb_pct: advanced_info[12].text,
+          ast_pct: advanced_info[13].text,
+          stl_pct: advanced_info[14].text,
 
-    #   advs = doc[:advs]
+          blk_pct: advanced_info[15].text,
+          tov_pct: advanced_info[16].text,
+          usg_pct: advanced_info[17].text,
+          o_rtg: advanced_info[18].text,
+          d_rtg: advanced_info[19].text,
 
-    #   advs.map do |player|
-    #     advanced_info = player.css('td')
+          ows: advanced_info[20].text,
+          dws: advanced_info[21].text,
+          ws: advanced_info[22].text,
+          ws_48: advanced_info[23].text
+        }
 
-    #     href = advanced_info[1].css('a').attr("href").value
-    #     br_id = href.slice(11..(href.index('.')-1))
+        player_advanceds << player_advanced
+      end
 
-    #     player = team.players.find_by(br_id: br_id)
+      # XXXXXXXXXXXXXXXXX CREATE PLAYER ADVANCED STATS XXXXXXXXXXXXXXXXX
 
-    #     per = advanced_info[5].text
-    #     ts_pct = advanced_info[6].text
-    #     efg_pct = advanced_info[7].text
-    #     ft_ar = advanced_info[8].text
-    #     three_ar = advanced_info[9].text
-
-    #     orb_pct = advanced_info[10].text
-    #     drb_pct = advanced_info[11].text
-    #     trb_pct = advanced_info[12].text
-    #     ast_pct = advanced_info[13].text
-    #     stl_pct = advanced_info[14].text
-
-    #     blk_pct = advanced_info[15].text
-    #     tov_pct = advanced_info[16].text
-    #     usg_pct = advanced_info[17].text
-    #     o_rtg = advanced_info[18].text
-    #     d_rtg = advanced_info[19].text
-
-    #     ows = advanced_info[20].text
-    #     dws = advanced_info[21].text
-    #     ws = advanced_info[22].text
-    #     ws_48 = advanced_info[23].text
-
-    #     boy = player.create_adv(
-    #       br_id: br_id,
-    #       per: per,
-    #       ts_pct: ts_pct, 
-    #       efg_pct: efg_pct,
-
-    #       ft_ar: ft_ar,
-    #       three_ar: three_ar,
-    #       orb_pct: orb_pct,
-    #       drb_pct: drb_pct,
-
-    #       trb_pct: trb_pct,
-    #       ast_pct: ast_pct,
-    #       stl_pct: stl_pct,
-    #       blk_pct: blk_pct,
-
-    #       tov_pct: tov_pct,
-    #       usg_pct: usg_pct,
-    #       o_rtg: o_rtg,
-    #       d_rtg: d_rtg,
-
-    #       ows: ows,
-    #       dws: dws,
-    #       ws: ws,
-    #       ws_48: ws_48
-    #     )
+      player_advanceds.each do |player|
+        db_player = Player.find_by(br_id: player[:br_id])
+        membership = Membership.find_by(season_id: @db_season[:id], team_id: @db_team[:id], player_id: db_player[:id])
         
-    #     puts "#{player.name}"
-    #     advs[:added] += 1
-    #   end
+        Adv.create(
+          membership_id: membership[:id],
+          per: player[:per],
+          ts_pct: player[:ts_pct], 
+          efg_pct: player[:efg_pct],
+
+          ft_ar: player[:ft_ar],
+          three_ar: player[:three_ar],
+          orb_pct: player[:orb_pct],
+          drb_pct: player[:drb_pct],
+
+          trb_pct: player[:trb_pct],
+          ast_pct: player[:ast_pct],
+          stl_pct: player[:stl_pct],
+          blk_pct: player[:blk_pct],
+
+          tov_pct: player[:tov_pct],
+          usg_pct: player[:usg_pct],
+          o_rtg: player[:o_rtg],
+          d_rtg: player[:d_rtg],
+
+          ows: player[:ows],
+          dws: player[:dws],
+          ws: player[:ws],
+          ws_48: player[:ws_48]
+        )
+
+        puts db_player.name
+        advance[:added] += 1
+      end
 
     #   @salary = {
     #     added: 0,
