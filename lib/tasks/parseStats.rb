@@ -3,9 +3,9 @@ def parseStats(attrs, htmlPage)
   puts ""
   puts "#{attrs[:@db_season].year} #{attrs[:@db_team].br_id} ADDED A STAT LINE FOR THE FOLLOWING PLAYERS:"
 
+  @player_statlines = []
+  
   stats = htmlPage[:stats]
-
-  player_statlines = []
 
   stats.each do |player|
     stat = player.css('td')
@@ -45,8 +45,8 @@ def parseStats(attrs, htmlPage)
       pts: stat[26].text
     }
 
-    player_statlines << player_statline
+    @player_statlines << player_statline
   end
 
-  player_statlines
+  @player_statlines
 end

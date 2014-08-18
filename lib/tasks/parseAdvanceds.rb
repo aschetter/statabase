@@ -3,9 +3,9 @@ def parseAdvanceds(attrs, htmlPage)
   puts ""
   puts "#{attrs[:@db_season].year} #{attrs[:@db_team].br_id} ADDED ADVANCED STATS FOR THE FOLLOWING PLAYERS:"
 
+  @player_advanceds = []
+  
   advs = htmlPage[:advs]
-
-  player_advanceds = []
 
   advs.each do |player|
     advanced_info = player.css('td')
@@ -37,8 +37,8 @@ def parseAdvanceds(attrs, htmlPage)
       ws_48: advanced_info[23].text
     }
 
-    player_advanceds << player_advanced
+    @player_advanceds << player_advanced
   end
 
-  player_advanceds
+  @player_advanceds
 end

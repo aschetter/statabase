@@ -1,9 +1,5 @@
 def persistStats(attrs, player_statlines)
 
-  statlines = {
-    added: 0
-  }
-
   player_statlines.each do |player|
     db_player = Player.find_by(br_id: player[:br_id])
     membership = Membership.find_by(season_id: attrs[:@db_season][:id], team_id: attrs[:@db_team][:id], player_id: db_player[:id])
@@ -43,6 +39,6 @@ def persistStats(attrs, player_statlines)
     )
 
     puts db_player.name
-    statlines[:added] += 1
+    @statlines[:added] += 1
   end
 end

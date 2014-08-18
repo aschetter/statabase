@@ -2,10 +2,6 @@ def persistAdvanceds(attrs, player_advanceds)
 
   player_advanceds.each do |player|
 
-    advanced = {
-      added: 0
-    }
-
     db_player = Player.find_by(br_id: player[:br_id])
     membership = Membership.find_by(season_id: attrs[:@db_season][:id], team_id: attrs[:@db_team][:id], player_id: db_player[:id])
     
@@ -37,6 +33,6 @@ def persistAdvanceds(attrs, player_advanceds)
     )
 
     puts db_player.name
-    advanced[:added] += 1
+    @advanceds[:added] += 1
   end
 end

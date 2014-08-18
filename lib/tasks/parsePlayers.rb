@@ -1,7 +1,8 @@
-def parseBios(htmlPage)
-  players = htmlPage[:players]
+def parsePlayers(htmlPage)
+  
+  @player_bios = []
 
-  player_bios = []
+  players = htmlPage[:players]
 
   players.each do |player|
     player = player.css('td')
@@ -20,8 +21,8 @@ def parseBios(htmlPage)
       college: player[7].text,
     }
 
-    player_bios << player_bio
+    @player_bios << player_bio
   end
 
-  player_bios
+  @player_bios
 end
