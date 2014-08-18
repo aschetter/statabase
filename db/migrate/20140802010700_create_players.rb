@@ -3,11 +3,8 @@ class CreatePlayers < ActiveRecord::Migration
     create_table :players do |t|
 
       t.string  :br_id
-
       t.string  :name
-      t.integer :salary
       t.integer :number
-      t.string  :name
       t.string  :position
       
       t.string  :height
@@ -15,14 +12,6 @@ class CreatePlayers < ActiveRecord::Migration
       t.string  :birth_date
       t.string  :experience
       t.string  :college
-
-
-
-
-
-
-
-      t.belongs_to :team
 
       t.timestamps
     end

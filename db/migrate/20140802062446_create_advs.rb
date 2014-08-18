@@ -2,7 +2,7 @@ class CreateAdvs < ActiveRecord::Migration
   def change
     create_table :advs do |t|
 
-      t.belongs_to :player
+      t.belongs_to :membership
       t.string     :br_id
 
       t.float      :per

@@ -13,8 +13,11 @@
 
 ActiveRecord::Schema.define(version: 20140802062446) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "advs", force: true do |t|
-    t.integer  "player_id"
+    t.integer  "membership_id"
     t.string   "br_id"
     t.float    "per"
     t.float    "ts_pct"
@@ -40,6 +43,10 @@ ActiveRecord::Schema.define(version: 20140802062446) do
   end
 
   create_table "memberships", force: true do |t|
+    t.integer  "player_id"
+    t.integer  "team_id"
+    t.integer  "season_id"
+    t.integer  "salary"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -47,7 +54,6 @@ ActiveRecord::Schema.define(version: 20140802062446) do
   create_table "players", force: true do |t|
     t.string   "br_id"
     t.string   "name"
-    t.integer  "salary"
     t.integer  "number"
     t.string   "position"
     t.string   "height"
@@ -55,7 +61,6 @@ ActiveRecord::Schema.define(version: 20140802062446) do
     t.string   "birth_date"
     t.string   "experience"
     t.string   "college"
-    t.integer  "team_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -74,7 +79,7 @@ ActiveRecord::Schema.define(version: 20140802062446) do
   end
 
   create_table "stats", force: true do |t|
-    t.integer  "player_id"
+    t.integer  "membership_id"
     t.string   "br_id"
     t.integer  "age"
     t.integer  "gp"

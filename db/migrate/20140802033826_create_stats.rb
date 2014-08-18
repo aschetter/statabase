@@ -2,7 +2,7 @@ class CreateStats < ActiveRecord::Migration
   def change
     create_table :stats do |t|
 
-      t.belongs_to :player
+      t.belongs_to :membership
       t.string     :br_id
 
       t.integer    :age
