@@ -1,30 +1,40 @@
-require_relative './loadPage.rb'
 require_relative './persistSeason.rb'
 require_relative './persistTeam.rb'
+require_relative './persistSeasonTeam.rb'
+require_relative './loadPage.rb'
 
 namespace :db do
   desc "Erase and fill database"
   task :populate => :environment do
 
+    attrs = {}
+
   # XXXXXXXXXXXXXXXXX PERSIST SEASON XXXXXXXXXXXXXXXXX
 
-    @db_season = persistSeason(2014)
+    attrs[:@db_season] = persistSeason(2014)
 
   # XXXXXXXXXXXXXXXXX PERSIST TEAM XXXXXXXXXXXXXXXXX
 
     # br_id: unique team ID in the online database (0-29)
     br_id = 25
 
-    @db_team = persistTeam(br_id)
+    attrs[:@db_team] = persistTeam(br_id)
 
   # XXXXXXXXXXXXXXXXX PERSIST SEASON_TEAM XXXXXXXXXXXXXXXXX
+
+    persistSeasonTeam(attrs)
+
+  # XXXXXXXXXXXXXXXXX LOAD HTML PAGE XXXXXXXXXXXXXXXXX
+
+    htmlPage = LoadPage(attrs)
+
+  # XXXXXXXXXXXXXXXXX PARSE PLAYER BIOS XXXXXXXXXXXXXXXXX
+
+    player_bios = parseBios(htmlPage)
+
+  # XXXXXXXXXXXXXXXXX PERSIST PLAYER BIOS XXXXXXXXXXXXXXXXX
   
-    persistSeasonTeam(@db_season, @db_team)
-
-    # load_stat_page
-
-    # parse_bios
-    # persist_bios
+    persistBios(player_bios)
 
     # persist_roster
 
@@ -37,103 +47,6 @@ namespace :db do
     # parse_salaries
     # persist_salaries
 
-# # XXXXXXXXXXXXXXXXX PERSIST SEASON_TEAM XXXXXXXXXXXXXXXXX
-
-#     @db_season_team = SeasonTeam.find_by(season_id: @db_season[:id], team_id: @db_team[:id])
-
-#     if @db_season_team.nil?
-#       @db_season_team = SeasonTeam.create(season_id: @db_season[:id], team_id: @db_team[:id])
-#     end
-
-# # XXXXXXXXXXXXXXXXX LOAD TEAM STAT PAGE XXXXXXXXXXXXXXXXX
-
-#     attrs = {
-#         season: @db_season,
-#         team: @db_team
-#     }
-
-#     doc = StatLoader::LoadPage.run(attrs)
-
-# # XXXXXXXXXXXXXXXXX PARSE PLAYER BIOS XXXXXXXXXXXXXXXXX
-
-#     players = doc[:players]
-
-#     player_bios = []
-
-#     players.each do |player|
-#       player = player.css('td')
-#       href = player[1].css('a').attr("href").value
-
-#       player_bio = {
-#         br_id: href.slice(11..(href.index('.')-1)),
-#         name: player[1].text,
-#         number: player[0].text.to_i,
-#         position: player[2].text,
-
-#         height: player[3].text,
-#         weight: player[4].text,
-#         birth_date: player[5].text,
-#         experience: player[6].text,
-#         college: player[7].text,
-#       }
-
-#       player_bios << player_bio
-#     end
-
-# # XXXXXXXXXXXXXXXXX PERSIST PLAYER BIOS XXXXXXXXXXXXXXXXX
-
-#     basic_info = {
-#       added: 0,
-#       already_in_db: 0
-#     }
-
-#     team_players = {
-#       added: [],
-#       in_db: []
-#     }
-
-#     player_bios.each do |player|
-
-#       @db_player = Player.find_by(br_id: player[:br_id])
-
-#       if @db_player.nil?
-
-#         @db_player = Player.create(
-#           br_id: player[:br_id],
-#           name: player[:name],
-#           number: player[:number],
-#           position: player[:position],
-
-#           height: player[:height],
-#           weight: player[:weight],
-#           birth_date: player[:birth_date],
-#           experience: player[:experience],
-#           college: player[:college]
-#         )
-
-#         basic_info[:added] += 1
-#         team_players[:added] << @db_player
-
-#       else
-
-#         basic_info[:already_in_db] += 1
-#         team_players[:in_db] << @db_player
-#       end
-#     end
-
-#     puts ""
-#     puts "ADDED BASIC INFO FOR:"
-
-#     team_players[:added].each do |player|
-#       puts player.name
-#     end
-
-#     puts ""
-#     puts "THESE PLAYERS WERE ALREADY IN THE DB:"
-
-#     team_players[:in_db].each do |player|
-#       puts player.name
-#     end
 
 # # XXXXXXXXXXXXXXXXX PERSIST TEAM ROSTER XXXXXXXXXXXXXXXXX
 
@@ -159,7 +72,7 @@ namespace :db do
 #       added: 0
 #     }
 
-#     stats = doc[:stats]
+#     stats = htmlPage[:stats]
 
 #     player_statlines = []
 
@@ -257,7 +170,7 @@ namespace :db do
 #       added: 0
 #     }
 
-#     advs = doc[:advs]
+#     advs = htmlPage[:advs]
 
 #     player_advanceds = []
 
@@ -343,7 +256,7 @@ namespace :db do
 
 #     player_salaries = []
 
-#     salaries = doc[:salaries]
+#     salaries = htmlPage[:salaries]
 
 #     salaries.each do |player|
 #       salary_info = player.css('td')
