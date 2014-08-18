@@ -3,7 +3,6 @@ class CreateStats < ActiveRecord::Migration
     create_table :stats do |t|
 
       t.belongs_to :membership
-      t.string     :br_id
 
       t.integer    :age
       t.integer    :gp

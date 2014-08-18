@@ -80,7 +80,6 @@ ActiveRecord::Schema.define(version: 20140802062446) do
 
   create_table "stats", force: true do |t|
     t.integer  "membership_id"
-    t.string   "br_id"
     t.integer  "age"
     t.integer  "gp"
     t.integer  "gs"

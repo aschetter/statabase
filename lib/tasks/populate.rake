@@ -138,10 +138,10 @@ namespace :db do
         puts player.name
       end
 
-      ###################################################### CREATE PLAYER MEMBERSHIP ###########
+      # XXXXXXXXXXXXXXXXX CREATE TEAM ROSTER XXXXXXXXXXXXXXXXX
 
       puts ""
-      puts "THE #{@db_season.year} #{@db_team.br_id} ADDED THE FOLLOWING PLAYERS TO ITS ROSTER:"
+      puts "#{@db_season.year} #{@db_team.br_id} ADDED THE FOLLOWING PLAYERS TO ITS ROSTER:"
 
       team_players[:added].each do |player|
         Membership.create(player_id: player.id, team_id: @db_team[:id], season_id: @db_season[:id])
@@ -153,90 +153,108 @@ namespace :db do
         puts player.name
       end
 
-      # stats = {
-      #   added: 0
-      # }
+      # XXXXXXXXXXXXXXXXX CREATE PLAYER STAT LINE XXXXXXXXXXXXXXXXX
 
-      # puts ""
-      # puts "ADDED SEASON TOTALS FOR:"
+      puts ""
+      puts "#{@db_season.year} #{@db_team.br_id} ADDED A STAT LINE FOR THE FOLLOWING PLAYERS:"
 
-      # stats = doc[:stats]
+      statlines = {
+        added: 0
+      }
 
-      # stats.map do |player|
-      #   stat = player.css('td')
+      stats = doc[:stats]
 
-      #   href = stat[1].css('a').attr("href").value
-      #   br_id = href.slice(11..(href.index('.')-1))
+      player_statlines = []
 
-      #   stats = Membership.stat
+      stats.each do |player|
+        stat = player.css('td')
 
-      #   age = stat[2].text.to_i
-      #   gp = stat[3].text.to_i
-      #   gs = stat[4].text.to_i
-      #   min = stat[5].text
+        href = stat[1].css('a').attr("href").value
 
-      #   fg_made = stat[6].text
-      #   fg_att = stat[7].text
-      #   fg_pct = stat[8].text
-      #   three_made = stat[9].text
+        player_statline = {
+          br_id: href.slice(11..(href.index('.')-1)),
+          age: stat[2].text.to_i,
+          gp: stat[3].text.to_i,
+          gs: stat[4].text.to_i,
+          min: stat[5].text,
 
-      #   three_att = stat[10].text
-      #   three_pct = stat[11].text
-      #   two_made = stat[12].text
-      #   two_att = stat[13].text
+          fg_made: stat[6].text,
+          fg_att: stat[7].text,
+          fg_pct: stat[8].text,
+          three_made: stat[9].text,
 
-      #   two_pct = stat[14].text
-      #   ft_made = stat[15].text
-      #   ft_att = stat[16].text
-      #   ft_pct = stat[17].text
+          three_att: stat[10].text,
+          three_pct: stat[11].text,
+          two_made: stat[12].text,
+          two_att: stat[13].text,
 
-      #   orb = stat[18].text
-      #   drb = stat[19].text
-      #   trb = stat[20].text
-      #   ast = stat[21].text
+          two_pct: stat[14].text,
+          ft_made: stat[15].text,
+          ft_att: stat[16].text,
+          ft_pct: stat[17].text,
 
-      #   stl = stat[22].text
-      #   blk = stat[23].text
-      #   tov = stat[24].text
-      #   pf = stat[25].text
-      #   pts = stat[26].text
-        
-      #   player.create_stat(
-      #     br_id: br_id,
-      #     age: age,
-      #     gp: gp,
-      #     gs: gs,
-      #     min: min,
+          orb: stat[18].text,
+          drb: stat[19].text,
+          trb: stat[20].text,
+          ast: stat[21].text,
 
-      #     fg_made: fg_made,
-      #     fg_att: fg_att,
-      #     fg_pct: fg_pct,
-      #     three_made: three_made,
+          stl: stat[22].text,
+          blk: stat[23].text,
+          tov: stat[24].text,
+          pf: stat[25].text,
+          pts: stat[26].text
+        }
 
-      #     three_att: three_att,
-      #     three_pct: three_pct,
-      #     two_made: two_made,
-      #     two_att: two_att,
+        player_statlines << player_statline
+      end
 
-      #     two_pct: two_pct,
-      #     ft_made: ft_made,
-      #     ft_att: ft_att,
-      #     ft_pct: ft_pct,
+      player_statlines.each do |player|
 
-      #     orb: orb,
-      #     drb: drb,
-      #     trb: trb,
-      #     ast: ast,
+        db_player = Player.find_by(br_id: player[:br_id])
+        membership = Membership.find_by(season_id: @db_season, team_id: @db_team[:id], player_id: db_player[:id])
+        Stat.create(
+          membership_id: membership[:id],
+          age: player[:age],
+          gp: player[:gp],
+          gs: player[:gs],
+          min: player[:min],
 
-      #     stl: stl,
-      #     blk: blk,
-      #     tov: tov,
-      #     pf:  pf,
-      #     pts: pts,
-      #   )
-      #   puts "#{player.name}"
-      #   stats[:added] += 1
-      # end
+          fg_made: player[:fg_made],
+          fg_att: player[:fg_att],
+          fg_pct: player[:fg_pct],
+          three_made: player[:three_made],
+
+          three_att: player[:three_att],
+          three_pct: player[:three_pct],
+          two_made: player[:two_made],
+          two_att: player[:two_att],
+
+          two_pct: player[:two_pct],
+          ft_made: player[:ft_made],
+          ft_att: player[:ft_att],
+          ft_pct: player[:ft_pct],
+
+          orb: player[:orb],
+          drb: player[:drb],
+          trb: player[:trb],
+          ast: player[:ast],
+
+          stl: player[:stl],
+          blk: player[:blk],
+          tov: player[:tov],
+          pf: player[:pf],
+          pts: player[:pts],
+        )
+
+        puts "#{db_player.name}"
+        statlines[:added] += 1
+      end
+
+
+
+
+
+
 
     #   advs = {
     #     added: 0
