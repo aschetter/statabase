@@ -6,6 +6,9 @@ require_relative './parseBios.rb'
 require_relative './persistBios.rb'
 require_relative './persistRoster.rb'
 
+require_relative './parseStats.rb'
+require_relative './persistStats.rb'
+
 namespace :db do
   desc "Erase and fill database"
   task :populate => :environment do
@@ -43,112 +46,19 @@ namespace :db do
 
     persistRoster(attrs, team_players)
 
-    # parse_statlines
-    # persist_statlines
+  # XXXXXXXXXXXXXXXXX PARSE PLAYER STATS XXXXXXXXXXXXXXXXX
+
+    player_statlines = parseStats(attrs, htmlPage)
+
+  # XXXXXXXXXXXXXXXXX PERSIST PLAYER STAT LINES XXXXXXXXXXXXXXXXX
+
+    persistStats(attrs, player_statlines)
 
     # parse_advanceds
     # persist_advanceds
 
     # parse_salaries
     # persist_salaries
-
-# # XXXXXXXXXXXXXXXXX PARSE PLAYER STAT LINES XXXXXXXXXXXXXXXXX
-
-#     puts ""
-#     puts "#{@db_season.year} #{@db_team.br_id} ADDED A STAT LINE FOR THE FOLLOWING PLAYERS:"
-
-#     statlines = {
-#       added: 0
-#     }
-
-#     stats = htmlPage[:stats]
-
-#     player_statlines = []
-
-#     stats.each do |player|
-#       stat = player.css('td')
-#       href = stat[1].css('a').attr("href").value
-
-#       player_statline = {
-#         br_id: href.slice(11..(href.index('.')-1)),
-#         age: stat[2].text.to_i,
-#         gp: stat[3].text.to_i,
-#         gs: stat[4].text.to_i,
-#         min: stat[5].text,
-
-#         fg_made: stat[6].text,
-#         fg_att: stat[7].text,
-#         fg_pct: stat[8].text,
-#         three_made: stat[9].text,
-
-#         three_att: stat[10].text,
-#         three_pct: stat[11].text,
-#         two_made: stat[12].text,
-#         two_att: stat[13].text,
-
-#         two_pct: stat[14].text,
-#         ft_made: stat[15].text,
-#         ft_att: stat[16].text,
-#         ft_pct: stat[17].text,
-
-#         orb: stat[18].text,
-#         drb: stat[19].text,
-#         trb: stat[20].text,
-#         ast: stat[21].text,
-
-#         stl: stat[22].text,
-#         blk: stat[23].text,
-#         tov: stat[24].text,
-#         pf: stat[25].text,
-#         pts: stat[26].text
-#       }
-
-#       player_statlines << player_statline
-#     end
-
-# # XXXXXXXXXXXXXXXXX PERSIST PLAYER STAT LINES XXXXXXXXXXXXXXXXX
-
-#     player_statlines.each do |player|
-#       db_player = Player.find_by(br_id: player[:br_id])
-#       membership = Membership.find_by(season_id: @db_season[:id], team_id: @db_team[:id], player_id: db_player[:id])
-      
-#       Stat.create(
-#         membership_id: membership[:id],
-#         age: player[:age],
-#         gp: player[:gp],
-#         gs: player[:gs],
-#         min: player[:min],
-
-#         fg_made: player[:fg_made],
-#         fg_att: player[:fg_att],
-#         fg_pct: player[:fg_pct],
-#         three_made: player[:three_made],
-
-#         three_att: player[:three_att],
-#         three_pct: player[:three_pct],
-#         two_made: player[:two_made],
-#         two_att: player[:two_att],
-
-#         two_pct: player[:two_pct],
-#         ft_made: player[:ft_made],
-#         ft_att: player[:ft_att],
-#         ft_pct: player[:ft_pct],
-
-#         orb: player[:orb],
-#         drb: player[:drb],
-#         trb: player[:trb],
-#         ast: player[:ast],
-
-#         stl: player[:stl],
-#         blk: player[:blk],
-#         tov: player[:tov],
-#         pf: player[:pf],
-#         pts: player[:pts],
-#       )
-
-#       puts db_player.name
-#       statlines[:added] += 1
-#     end
 
 # # XXXXXXXXXXXXXXXXX PARSE PLAYER ADVANCED STATS XXXXXXXXXXXXXXXXX
 
