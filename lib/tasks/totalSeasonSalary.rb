@@ -5,7 +5,7 @@ def totalSeasonSalary(players_memberships)
   players_memberships.each do |player_memberships|
 
     @player = {
-      name: "",
+      player_id: nil,
       memberships: [],
       total: []
     }
@@ -20,22 +20,16 @@ def totalSeasonSalary(players_memberships)
       @stats[:total_salary] += membership.salary.to_i
       @stats[:total_games] += membership.stat.gp.to_i
 
-      player = Player.find(membership.player_id)
-      team = Team.find(membership.team_id)
+      membership_id = membership.id
 
-      if @player[:name] == ""
-        @player[:name] = player.name
-      end      
-
-      stats = { team: team.br_id, gp: membership.stat.gp.to_i, salary: membership.salary }
+      stats = { membership_id: membership_id, gp: membership.stat.gp.to_i, salary: membership.salary }
       @player[:memberships] << stats
-
     end
 
-      total = { totalGP: @stats[:total_games], totalSalary: @stats[:total_salary] }
-      @player[:total] = total
+    total = { totalGP: @stats[:total_games], totalSalary: @stats[:total_salary] }
+    @player[:total] = total
 
-      @players << @player
+    @players << @player
   end
 
   @players

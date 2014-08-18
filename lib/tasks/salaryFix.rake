@@ -1,6 +1,8 @@
 require_relative './findNilSalaries.rb'
 require_relative './matchPlayer.rb'
 require_relative './totalSeasonSalary.rb'
+require_relative './calculateGamePercentages.rb'
+require_relative './adjustPlayerSalaries.rb'
 
 namespace :db do
   task :salaryFix => :environment do
@@ -23,40 +25,11 @@ namespace :db do
 
 ####### CALCULATE PLAYERS' GAMES PLAYED PERCENTAGE PER TEAM
 
+    percentages = calculateGamePercentages(player_salaries)
 
-    def calculateGamePercentage(player_salaries)
+####### ADJUST PLAYERS' SALARIES BASED ON GAMES PLAYED PERCENTAGES
 
-      player_salaries.each do |player|
-
-        puts player[:name]
-
-        player[:memberships].each do |membership|
-          team_games = membership[:gp].to_f
-          season_games = player[:total][:totalGP]
-
-          gp_percentage = team_games / season_games
-          gp_percentage = ( gp_percentage * 100 ).round / 100.0
-        end
-      end
-    end
-
-    calculateGamePercentage(player_salaries)
-
-      #     player_team.salary = gp_percentage * total_salary
-      #     player_team.save
-      #     puts "#{player_team.team.br_id}"
-      #     puts "SALARY: #{player_team.salary}"
-      #     puts "GAMES: #{player_team.stat.gp}"
-      #     puts "ALL GAMES: #{total_games}"
-      #     puts "GP PERCENTAGE: #{gp_percentage}"
-      #     puts ""
-      #   end
-      # end
-
-
-
-
-
+    adjustPlayerSalaries(percentages)
 
   end
 end

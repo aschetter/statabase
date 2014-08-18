@@ -3,7 +3,8 @@ def matchPlayer(memberships)
   @players_memberships = []
 
   memberships.each do |memberships|
-    @players_memberships << Membership.where(season_id: memberships.season_id, player_id: memberships.player_id)
+    membership = Membership.where(season_id: memberships.season_id, player_id: memberships.player_id)
+    @players_memberships << membership
   end
 
   @players_memberships
