@@ -2,6 +2,9 @@ require_relative './persistSeason.rb'
 require_relative './persistTeam.rb'
 require_relative './persistSeasonTeam.rb'
 require_relative './loadPage.rb'
+require_relative './parseBios.rb'
+require_relative './persistBios.rb'
+require_relative './persistRoster.rb'
 
 namespace :db do
   desc "Erase and fill database"
@@ -34,9 +37,11 @@ namespace :db do
 
   # XXXXXXXXXXXXXXXXX PERSIST PLAYER BIOS XXXXXXXXXXXXXXXXX
   
-    persistBios(player_bios)
+    team_players = persistBios(player_bios)
 
-    # persist_roster
+  # XXXXXXXXXXXXXXXXX PERSIST TEAM ROSTER XXXXXXXXXXXXXXXXX
+
+    persistRoster(attrs, team_players)
 
     # parse_statlines
     # persist_statlines
@@ -46,22 +51,6 @@ namespace :db do
 
     # parse_salaries
     # persist_salaries
-
-
-# # XXXXXXXXXXXXXXXXX PERSIST TEAM ROSTER XXXXXXXXXXXXXXXXX
-
-#     puts ""
-#     puts "#{@db_season.year} #{@db_team.br_id} ADDED THE FOLLOWING PLAYERS TO ITS ROSTER:"
-
-#     team_players[:added].each do |player|
-#       Membership.create(player_id: player.id, team_id: @db_team[:id], season_id: @db_season[:id])
-#       puts player.name
-#     end
-
-#     team_players[:in_db].each do |player|
-#       Membership.create(player_id: player.id, team_id: @db_team[:id], season_id: @db_season[:id])
-#       puts player.name
-#     end
 
 # # XXXXXXXXXXXXXXXXX PARSE PLAYER STAT LINES XXXXXXXXXXXXXXXXX
 

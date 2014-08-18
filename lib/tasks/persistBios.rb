@@ -51,4 +51,6 @@ def persistBios(player_bios)
   team_players[:in_db].each do |player|
     puts player.name
   end
+
+  team_players
 end
