@@ -48,7 +48,7 @@ namespace :db do
     }
 
     # br_id: unique team ID in the online database (0-29)
-    br_id = 27
+    br_id = 25
 
     attrs[:@db_team] = persistTeam(br_id)
 

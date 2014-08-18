@@ -1,3 +1,11 @@
+# module BBall
+#   # class Parser
+#     def self.parse_players()
+      
+#     end
+#   # end
+# end
+
 def parsePlayers(htmlPage)
   
   @player_bios = []
