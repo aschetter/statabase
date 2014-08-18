@@ -33,6 +33,6 @@ def persistAdvanceds(attrs, player_advanceds)
     )
 
     puts db_player.name
-    @advanceds[:added] += 1
+    @team_stats[:advanceds][:added] += 1
   end
 end

@@ -38,7 +38,7 @@ def persistStats(attrs, player_statlines)
       pts: player[:pts],
     )
 
+    @team_stats[:statlines][:added] += 1
     puts db_player.name
-    @statlines[:added] += 1
   end
 end

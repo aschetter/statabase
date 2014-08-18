@@ -30,8 +30,25 @@ namespace :db do
 
   # XXXXXXXXXXXXXXXXX TEAM XXXXXXXXXXXXXXXXX
 
+    @team_stats = {
+      players: {
+        added: 0,
+        already_in_db: 0
+      },
+      statlines: {
+        added: 0
+      },
+      advanceds: {
+        added: 0
+      },
+      salaries: {
+        added: 0,
+        updated: 0
+      }
+    }
+
     # br_id: unique team ID in the online database (0-29)
-    br_id = 25
+    br_id = 27
 
     attrs[:@db_team] = persistTeam(br_id)
 
@@ -45,10 +62,6 @@ namespace :db do
 
   # XXXXXXXXXXXXXXXXX PLAYER BIOS XXXXXXXXXXXXXXXXX
 
-    @players = {
-      added: 0,
-      already_in_db: 0
-    }
 
     player_bios = parsePlayers(htmlPage)
     team_players = persistPlayers(player_bios)
@@ -59,37 +72,28 @@ namespace :db do
 
   # XXXXXXXXXXXXXXXXX PLAYER STATS XXXXXXXXXXXXXXXXX
 
-    @statlines = {
-      added: 0
-    }
-
     player_statlines = parseStats(attrs, htmlPage)
     persistStats(attrs, player_statlines)
 
   # XXXXXXXXXXXXXXXXX PLAYER ADVANCED STATS XXXXXXXXXXXXXXXXX
-
-    @advanceds = {
-      added: 0
-    }
 
     player_advanceds = parseAdvanceds(attrs, htmlPage)
     persistAdvanceds(attrs, player_advanceds)
 
   # XXXXXXXXXXXXXXXXX PLAYER SALARY INFO XXXXXXXXXXXXXXXXX
 
-    @salaries = {
-      added: 0,
-      updated: 0
-    }
-
     player_salaries = parseSalaries(htmlPage)
     persistSalaries(attrs, player_salaries)
 
     puts ""
-    puts "PLAYERS BASIC INFO ADDED: #{@players[:added]}"
-    puts "SEASON TOTALS ADDED: #{@statlines[:added]}"
-    puts "ADVANCED STATS ADDED: #{@advanceds[:added]}"
-    puts "JUST PLAYER SALARY ADDED: #{@salaries[:added]}"
-    puts "PLAYERS UPDATED WITH SALARY INFO: #{@salaries[:updated]}"
+    puts "TEAM: #{attrs[:@db_team].br_id}"
+    puts "SEASON: #{attrs[:@db_season].year}"
+    puts ""
+    puts "PLAYERS ADDED TO DB: #{@team_stats[:players][:added]}"
+    puts "PLAYERS ALREADY IN DB: #{@team_stats[:players][:already_in_db]}"
+    puts "SEASON STATS ADDED: #{@team_stats[:statlines][:added]}"
+    puts "ADVANCED STATS ADDED: #{@team_stats[:advanceds][:added]}"
+    puts "JUST PLAYER SALARY ADDED: #{@team_stats[:salaries][:added]}"
+    puts "PLAYERS UPDATED WITH SALARY INFO: #{@team_stats[:salaries][:updated]}"
   end
 end

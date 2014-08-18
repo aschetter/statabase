@@ -24,18 +24,18 @@ def persistPlayers(player_bios)
         college: player[:college]
       )
 
-      @players[:added] += 1
+      @team_stats[:players][:added] += 1
       @team_players[:added] << @db_player
 
     else
 
-      @players[:already_in_db] += 1
+      @team_stats[:players][:already_in_db] += 1
       @team_players[:in_db] << @db_player
     end
   end
 
   puts ""
-  puts "ADDED BASIC INFO FOR:"
+  puts "ADDED THE FOLLOWING PLAYERS TO THE DB:"
 
   @team_players[:added].each do |player|
     puts player.name
