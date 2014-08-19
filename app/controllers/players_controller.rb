@@ -212,31 +212,6 @@ class PlayersController < ApplicationController
     end
   end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   private
 
   def set_season
