@@ -1,22 +1,24 @@
-require_relative './persistSeason.rb'
-require_relative './persistTeam.rb'
-require_relative './persistSeasonTeam.rb'
+require_relative './populate/persistSeason.rb'
+require_relative './populate/persistTeam.rb'
+require_relative './populate/persistSeasonTeam.rb'
 
-require_relative './loadPage.rb'
+require_relative './populate/loadPage.rb'
 
-require_relative './parsePlayers.rb'
-require_relative './persistPlayers.rb'
+require_relative './populate/parsePlayers.rb'
+require_relative './populate/persistPlayers.rb'
 
-require_relative './persistRoster.rb'
+require_relative './populate/persistRoster.rb'
 
-require_relative './parseStats.rb'
-require_relative './persistStats.rb'
+require_relative './populate/parseStats.rb'
+require_relative './populate/persistStats.rb'
 
-require_relative './parseAdvanceds.rb'
-require_relative './persistAdvanceds.rb'
+require_relative './populate/parseAdvanceds.rb'
+require_relative './populate/persistAdvanceds.rb'
 
-require_relative './parseSalaries.rb'
-require_relative './persistSalaries.rb'
+require_relative './populate/parseSalaries.rb'
+require_relative './populate/persistSalaries.rb'
+
+require_relative './populate/displayResults.rb'
 
 namespace :db do
   desc "Erase and fill database"
@@ -26,11 +28,11 @@ namespace :db do
 
   # XXXXXXXXXXXXXXXXX SEASON XXXXXXXXXXXXXXXXX
 
-    attrs[:@db_season] = persistSeason(2014)
+    attrs[:@db_season] = BBall.persistSeason(2014)
 
   # XXXXXXXXXXXXXXXXX TEAM XXXXXXXXXXXXXXXXX
 
-    @team_stats = {
+    $team_stats = {
       players: {
         added: 0,
         already_in_db: 0
@@ -48,52 +50,45 @@ namespace :db do
     }
 
     # br_id: unique team ID in the online database (0-29)
-    br_id = 25
+    br_id = 27
 
-    attrs[:@db_team] = persistTeam(br_id)
+    attrs[:@db_team] = BBall.persistTeam(br_id)
 
   # XXXXXXXXXXXXXXXXX SEASON_TEAM XXXXXXXXXXXXXXXXX
 
-    persistSeasonTeam(attrs)
+    BBall.persistSeasonTeam(attrs)
 
   # XXXXXXXXXXXXXXXXX LOAD HTML PAGE XXXXXXXXXXXXXXXXX
 
-    htmlPage = LoadPage(attrs)
+    htmlPage = BBall.loadPage(attrs)
 
   # XXXXXXXXXXXXXXXXX PLAYER BIOS XXXXXXXXXXXXXXXXX
 
-
-    player_bios = parsePlayers(htmlPage)
-    team_players = persistPlayers(player_bios)
+    player_bios = BBall.parsePlayers(htmlPage)
+    team_players = BBall.persistPlayers(player_bios)
 
   # XXXXXXXXXXXXXXXXX TEAM ROSTER XXXXXXXXXXXXXXXXX
 
-    persistRoster(attrs, team_players)
+    BBall.persistRoster(attrs, team_players)
 
   # XXXXXXXXXXXXXXXXX PLAYER STATS XXXXXXXXXXXXXXXXX
 
-    player_statlines = parseStats(attrs, htmlPage)
-    persistStats(attrs, player_statlines)
+    player_statlines = BBall.parseStats(attrs, htmlPage)
+    BBall.persistStats(attrs, player_statlines)
 
   # XXXXXXXXXXXXXXXXX PLAYER ADVANCED STATS XXXXXXXXXXXXXXXXX
 
-    player_advanceds = parseAdvanceds(attrs, htmlPage)
-    persistAdvanceds(attrs, player_advanceds)
+    player_advanceds = BBall.parseAdvanceds(attrs, htmlPage)
+    BBall.persistAdvanceds(attrs, player_advanceds)
 
   # XXXXXXXXXXXXXXXXX PLAYER SALARY INFO XXXXXXXXXXXXXXXXX
 
-    player_salaries = parseSalaries(htmlPage)
-    persistSalaries(attrs, player_salaries)
+    player_salaries = BBall.parseSalaries(htmlPage)
+    BBall.persistSalaries(attrs, player_salaries)
 
-    puts ""
-    puts "TEAM: #{attrs[:@db_team].br_id}"
-    puts "SEASON: #{attrs[:@db_season].year}"
-    puts ""
-    puts "PLAYERS ADDED TO DB: #{@team_stats[:players][:added]}"
-    puts "PLAYERS ALREADY IN DB: #{@team_stats[:players][:already_in_db]}"
-    puts "SEASON STATS ADDED: #{@team_stats[:statlines][:added]}"
-    puts "ADVANCED STATS ADDED: #{@team_stats[:advanceds][:added]}"
-    puts "JUST PLAYER SALARY ADDED: #{@team_stats[:salaries][:added]}"
-    puts "PLAYERS UPDATED WITH SALARY INFO: #{@team_stats[:salaries][:updated]}"
+  # XXXXXXXXXXXXXXXXX DISPLAY RESULTS XXXXXXXXXXXXXXXXX
+
+    BBall.displayResults(attrs)
+
   end
 end

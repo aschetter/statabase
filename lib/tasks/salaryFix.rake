@@ -1,8 +1,8 @@
-require_relative './findNilSalaries.rb'
-require_relative './matchPlayer.rb'
-require_relative './totalSeasonSalary.rb'
-require_relative './calculateGamePercentages.rb'
-require_relative './adjustPlayerSalaries.rb'
+require_relative './salaryFix/findNilSalaries.rb'
+require_relative './salaryFix/matchPlayer.rb'
+require_relative './salaryFix/totalSeasonSalary.rb'
+require_relative './salaryFix/calculateGamePercentages.rb'
+require_relative './salaryFix/adjustPlayerSalaries.rb'
 
 namespace :db do
   task :salaryFix => :environment do
@@ -13,23 +13,23 @@ namespace :db do
 
 ####### FIND NIL SALARIES ########
 
-    memberships = findNilSalaries
+    memberships = BBall.findNilSalaries
 
 ####### FIND MATCHING PLAYERS FOR THE SAME SEASON
 
-    players_memberships = matchPlayer(memberships)
+    players_memberships = BBall.matchPlayer(memberships)
 
 ####### TOTAL PLAYERS' SEASON SALARY AND GAMES
 
-    player_salaries = totalSeasonSalary(players_memberships)
+    player_salaries = BBall.totalSeasonSalary(players_memberships)
 
 ####### CALCULATE PLAYERS' GAMES PLAYED PERCENTAGE PER TEAM
 
-    percentages = calculateGamePercentages(player_salaries)
+    percentages = BBall.calculateGamePercentages(player_salaries)
 
 ####### ADJUST PLAYERS' SALARIES BASED ON GAMES PLAYED PERCENTAGES
 
-    adjustPlayerSalaries(percentages)
+    BBall.adjustPlayerSalaries(percentages)
 
   end
 end
