@@ -20,7 +20,7 @@ class TeamsController < ApplicationController
   end
 
   def show_stats
-    if @season
+    if @team
       response = []
 
       memberships = Membership.where(season_id: @season.id, team_id: @team.id)
@@ -41,7 +41,7 @@ class TeamsController < ApplicationController
   end
 
   def show_advanceds
-    if @season
+    if @team
       response = []
 
       memberships = Membership.where(season_id: @season.id, team_id: @team.id)

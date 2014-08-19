@@ -21,6 +21,39 @@ class PlayersController < ApplicationController
     end
   end
 
+  def show_stats
+    if @player
+
+      membership = @player.memberships.find_by(season_id: @season.id, team_id: @team.id)
+      stat = Stat.find_by(membership_id: membership.id)
+
+      if stat
+        @stats = stat
+        render json: @stats
+      else
+        render status: 404, json: { status: :could_not_find }
+      end
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   def show_salaries
     if @player
 

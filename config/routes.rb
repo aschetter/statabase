@@ -40,6 +40,10 @@ Rails.application.routes.draw do
 
   get '/seasons/:season_id/teams/:team_id/players', to: 'players#index'
   get '/seasons/:season_id/teams/:team_id/players/:id', to: 'players#show'
+
+  get '/seasons/:season_id/teams/:team_id/players/:id/stats', to: 'players#show_stats'
+  get '/seasons/:season_id/teams/:team_id/players/:id/advanced_stats', to: 'players#show_advanceds'
+
   get '/seasons/:season_id/teams/:team_id/players/:id/salaries', to: 'players#show_salaries'
   get '/seasons/:season_id/teams/:team_id/players/:id/win_shares', to: 'players#show_win_shares'
   get '/seasons/:season_id/teams/:team_id/players/:id/win_shares_index', to: 'players#show_win_shares_index'
