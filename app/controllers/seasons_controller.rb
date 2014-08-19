@@ -34,7 +34,7 @@ class SeasonsController < ApplicationController
     end
   end
 
-  def show_advanceds
+  def advanced_stats
     if @memberships
       response = []
 
@@ -53,7 +53,7 @@ class SeasonsController < ApplicationController
     end
   end
 
-  def show_salaries
+  def salaries
     if @memberships
       response = []
 
@@ -73,7 +73,7 @@ class SeasonsController < ApplicationController
     end
   end
 
-  def show_win_shares
+  def win_shares
     if @memberships
       response = []
 
@@ -99,7 +99,7 @@ class SeasonsController < ApplicationController
     end
   end
 
-  def show_win_shares_index
+  def win_shares_index
     if @memberships
       response = []
 
@@ -131,7 +131,7 @@ class SeasonsController < ApplicationController
     end
   end
 
-  def show_cost_per_point
+  def cost_per_point
     if @memberships
       response = []
 
@@ -164,7 +164,7 @@ class SeasonsController < ApplicationController
     end
   end
 
-  def show_cost_per_assist
+  def cost_per_assist
     if @memberships
       response = []
 
@@ -197,7 +197,7 @@ class SeasonsController < ApplicationController
     end
   end
 
-  def show_cost_per_rebound
+  def cost_per_rebound
     if @memberships
       response = []
 
@@ -230,7 +230,7 @@ class SeasonsController < ApplicationController
     end
   end
 
-  def show_cost_per_block
+  def cost_per_block
     if @memberships
       response = []
 
@@ -263,7 +263,7 @@ class SeasonsController < ApplicationController
     end
   end
 
-  def show_cost_per_minute
+  def cost_per_minute
     if @memberships
       response = []
 
