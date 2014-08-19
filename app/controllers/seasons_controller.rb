@@ -14,6 +14,35 @@ class SeasonsController < ApplicationController
     end
   end
 
+  def show_salaries
+    @response = []
+
+    memberships = Membership.where(season_id: @season.id)
+
+    memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      entry = { name: player.name, team: team.br_id, salary: membership.salary }
+
+      @response << entry
+    end
+
+    render json: @response
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   private
 
   def set_season
