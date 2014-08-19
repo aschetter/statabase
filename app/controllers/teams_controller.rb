@@ -202,6 +202,75 @@ class TeamsController < ApplicationController
     end
   end
 
+  def show_cost_per_block
+    if @team
+      response = []
+
+      memberships = Membership.where(season_id: @season.id, team_id: @team.id)
+
+      memberships.each do |membership|
+        player = Player.find(membership.player_id)
+        stat = Stat.find_by(membership_id: membership.id)
+        salary = membership[:salary].to_i
+
+        if stat && salary > 0
+          blocks = stat[:blk]
+
+          if blocks > 0
+            cpb = salary / blocks
+            entry = { name: player.name, salary: salary, blk: blocks, cpb: cpb }
+          else
+            entry = { name: player.name, salary: salary, blk: 0, cpb: 0 }
+          end
+            response << entry
+        else
+          entry = { name: player.name, salary: salary, blk: 0, cpb: 0 }
+          response << entry
+        end
+      end
+
+      @cpb = response.sort_by { |player| player[:cpb].to_f }.reverse
+      render json: @cpb
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
+  def show_cost_per_minute
+    if @team
+      response = []
+
+      memberships = Membership.where(season_id: @season.id, team_id: @team.id)
+
+      memberships.each do |membership|
+        player = Player.find(membership.player_id)
+        team = Team.find(membership.team_id)
+        stat = Stat.find_by(membership_id: membership.id)
+        salary = membership[:salary].to_i
+
+        if stat && salary > 0
+          minutes = stat[:min]
+
+          if minutes > 0
+            cpm = salary / minutes
+            entry = { name: player.name, salary: salary, min: minutes, cpm: cpm }
+          else
+            entry = { name: player.name, salary: salary, min: 0, cpm: 0 }
+          end
+            response << entry
+        else
+          entry = { name: player.name, salary: salary, min: 0, cpm: 0 }
+          response << entry
+        end
+      end
+
+      @cpm = response.sort_by { |player| player[:cpm].to_f }.reverse
+      render json: @cpm
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
 
 
 
