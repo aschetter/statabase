@@ -50,7 +50,6 @@ class SeasonsController < ApplicationController
         entry = { name: player.name, team: team.br_id, ws: 0 }
         response << entry
       end
-
     end
 
     @win_shares = response.sort_by { |player| player[:ws].to_f }.reverse

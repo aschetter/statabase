@@ -40,6 +40,33 @@ class TeamsController < ApplicationController
     end
   end
 
+  def show_win_shares
+    if @team
+      response = []
+
+      memberships = Membership.where(season_id: @season.id, team_id: @team.id)
+
+      memberships.each do |membership|
+        player = Player.find(membership.player_id)
+        adv = Adv.find_by(membership_id: membership.id)
+
+        if adv
+          win_shares = adv[:ws]
+          entry = { name: player.name, ws: win_shares }
+          response << entry
+        else
+          entry = { name: player.name, ws: 0 }
+          response << entry
+        end
+      end
+
+      @win_shares = response.sort_by { |player| player[:ws].to_f }.reverse
+      render json: @win_shares
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
 
 
 
