@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   get '/seasons/:id/cost_per_assist', to: 'seasons#show_cost_per_assist'
   get '/seasons/:id/cost_per_rebound', to: 'seasons#show_cost_per_rebound'
   get '/seasons/:id/cost_per_block', to: 'seasons#show_cost_per_block'
+  get '/seasons/:id/cost_per_minute', to: 'seasons#show_cost_per_minute'
 
 
   # resources :seasons, only: [:index, :show] do
@@ -21,8 +22,8 @@ Rails.application.routes.draw do
   #   # resources :cost_per_points, only: [:index]-------
   #   # resources :cost_per_assists, only: [:index]-------
   #   # resources :cost_per_rebounds, only: [:index]-------
-  #   # resources :cost_per_blocks, only: [:index]
-  #   # resources :cost_per_mins, only: [:index]
+  #   # resources :cost_per_blocks, only: [:index]-------
+  #   # resources :cost_per_mins, only: [:index]-------
 
   #   resources :teams, only: [:index, :show] do
 

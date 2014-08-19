@@ -211,6 +211,37 @@ class SeasonsController < ApplicationController
     render json: @cpb
   end
 
+  def show_cost_per_minute
+    response = []
+
+    memberships = Membership.where(season_id: @season.id)
+
+    memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
+
+      if stat && salary > 0
+        minutes = stat[:min]
+
+        if minutes > 0
+          cpm = salary / minutes
+          entry = { name: player.name, team: team.br_id, salary: salary, min: minutes, cpm: cpm }
+        else
+          entry = { name: player.name, team: team.br_id, salary: salary, min: 0, cpm: 0 }
+        end
+          response << entry
+      else
+        entry = { name: player.name, team: team.br_id, salary: salary, min: 0, cpm: 0 }
+        response << entry
+      end
+    end
+
+    @cpm = response.sort_by { |player| player[:cpm].to_f }.reverse
+    render json: @cpm
+  end
+
 
 
 
