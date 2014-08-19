@@ -1,5 +1,6 @@
 class PlayersController < ApplicationController
   before_action :set_season
+  before_action :is_number?
   before_action :set_team
   before_action :set_player
   before_action :set_membership
@@ -251,12 +252,16 @@ class PlayersController < ApplicationController
     end
   end
 
+  def is_number?
+    params[:team_id].to_f.to_s == params[:team_id].to_s || params[:team_id].to_i.to_s == params[:team_id].to_s
+  end
+
   def set_team
     if !@season
       set_season
     end
-    team_id = params[:team_id].to_i
-    if team_id < 1
+
+    if is_number?
       begin
         @team = @season.teams.find_by(br_id: params[:team_id].upcase)
       rescue ActiveRecord::RecordNotFound => e

@@ -2,35 +2,6 @@ Rails.application.routes.draw do
 
   ###### SEASONS ROUTES ########
 
-  # resources :seasons do
-  #   resources :teams
-  #   # /seasons/43/stats
-  #   get 'stats', :on => :member
-  #   # /seasons/top
-  #   get 'top', :on => :collection
-  # end
-
-  # resources :quizzes do
-  #   resources :questions do
-  #     get "check" => "questions#check_answer"
-  #   end
-  # end
-
-  resources :seasons, only: [ :index, :show ] do
-    get 'stats', :on => :member
-    get 'advanced_stats', :on => :member
-
-    get 'salaries', :on => :member
-    get 'win_shares', :on => :member
-    get 'win_shares_index', :on => :member
-
-    get 'cost_per_point', :on => :member
-    get 'cost_per_assist', :on => :member
-    get 'cost_per_rebound', :on => :member
-    get 'cost_per_block', :on => :member
-    get 'cost_per_minute', :on => :member
-  end
-
   # get '/seasons', to: 'seasons#index'
   # get '/seasons/:id', to: 'seasons#show'
 
@@ -48,6 +19,44 @@ Rails.application.routes.draw do
   # get '/seasons/:id/cost_per_minute', to: 'seasons#cost_per_minute'
 
   ###### TEAMS ROUTES ########
+
+  # resources :seasons do
+  #   resources :teams
+  #   # /seasons/43/stats
+  #   get 'stats', :on => :member
+  #   # /seasons/top
+  #   get 'top', :on => :collection
+  # end
+
+  resources :seasons, only: [ :index, :show ] do
+    get 'stats', :on => :member
+    get 'advanced_stats', :on => :member
+
+    get 'salaries', :on => :member
+    get 'win_shares', :on => :member
+    get 'win_shares_index', :on => :member
+
+    get 'cost_per_point', :on => :member
+    get 'cost_per_assist', :on => :member
+    get 'cost_per_rebound', :on => :member
+    get 'cost_per_block', :on => :member
+    get 'cost_per_minute', :on => :member
+
+    resources :teams, only: [ :index, :show ] do
+      get 'stats', :on => :member
+      get 'advanced_stats', :on => :member
+
+      get 'salaries', :on => :member
+      get 'win_shares', :on => :member
+      get 'win_shares_index', :on => :member
+
+      get 'cost_per_point', :on => :member
+      get 'cost_per_assist', :on => :member
+      get 'cost_per_rebound', :on => :member
+      get 'cost_per_block', :on => :member
+      get 'cost_per_minute', :on => :member
+    end
+  end
 
   # get '/seasons/:season_id/teams', to: 'teams#index'
   # get '/seasons/:season_id/teams/:id', to: 'teams#show'

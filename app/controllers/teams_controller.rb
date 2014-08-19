@@ -1,5 +1,6 @@
 class TeamsController < ApplicationController
   before_action :set_season
+  before_action :is_number?
   before_action :set_team
   before_action :set_memberships
 
@@ -20,7 +21,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  def show_stats
+  def stats
     if @memberships
       response = []
 
@@ -39,7 +40,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  def show_advanceds
+  def advanced_stats
     if @memberships
       response = []
 
@@ -58,7 +59,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  def show_salaries
+  def salaries
     if @memberships
 
       response = []
@@ -77,7 +78,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  def show_win_shares
+  def win_shares
     if @memberships
       response = []
 
@@ -102,7 +103,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  def show_win_shares_index
+  def win_shares_index
     if @memberships
       response = []
 
@@ -133,7 +134,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  def show_cost_per_point
+  def cost_per_point
     if @memberships
       response = []
 
@@ -165,8 +166,8 @@ class TeamsController < ApplicationController
     end
   end
 
-  def show_cost_per_assist
-    if @@memberships
+  def cost_per_assist
+    if @memberships
       response = []
 
       @memberships.each do |membership|
@@ -197,7 +198,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  def show_cost_per_rebound
+  def cost_per_rebound
     if @memberships
       response = []
 
@@ -229,7 +230,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  def show_cost_per_block
+  def cost_per_block
     if @memberships
       response = []
 
@@ -261,7 +262,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  def show_cost_per_minute
+  def cost_per_minute
     if @memberships
       response = []
 
@@ -294,6 +295,7 @@ class TeamsController < ApplicationController
     end
   end
 
+
   private
 
   def set_season
@@ -313,22 +315,24 @@ class TeamsController < ApplicationController
     end
   end
 
+  def is_number?
+    params[:id].to_f.to_s == params[:id].to_s || params[:id].to_i.to_s == params[:id].to_s
+  end
+
   def set_team
     if !@season
       set_season
     end
-    
-    team_id = params[:id].to_i
 
-    if team_id.class == String
+    if is_number?
       begin
-        @team = @season.teams.find_by(br_id: params[:id].upcase)
+        @team = @season.teams.find(params[:id])
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
       end
     else
       begin
-        @team = @season.teams.find(params[:id])
+        @team = @season.teams.find_by(br_id: params[:id].upcase)
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
       end
