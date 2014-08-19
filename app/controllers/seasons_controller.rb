@@ -8,292 +8,259 @@ class SeasonsController < ApplicationController
   end
 
   def show
-    if @season
-      render json: @season
-    else
-      render status: 404, json: { status: :could_not_find }
-    end
+    return render_404 if @season.nil?
+    render json: @season
   end
 
   def stats
-    if @memberships
-      response = []
+    return render_404 if @memberships.nil?
+    response = []
 
-      @memberships.each do |membership|
-        stat = Stat.find_by(membership_id: membership.id)
+    @memberships.each do |membership|
+      stat = Stat.find_by(membership_id: membership.id)
 
-        if stat
-          response << stat
-        end
+      if stat
+        response << stat
       end
-
-      @stats = response.sort_by { |player| player[:pts].to_f }.reverse
-      render json: @stats
-    else
-      render status: 404, json: { status: :could_not_find }
     end
+
+    @stats = response.sort_by { |player| player[:pts].to_f }.reverse
+    render json: @stats
   end
 
   def advanced_stats
-    if @memberships
-      response = []
+    return render_404 if @memberships.nil?
+    response = []
 
-      @memberships.each do |membership|
-        adv = Adv.find_by(membership_id: membership.id)
+    @memberships.each do |membership|
+      adv = Adv.find_by(membership_id: membership.id)
 
-        if adv
-          response << adv
-        end
+      if adv
+        response << adv
       end
-
-      @advs = response.sort_by { |player| player[:ws].to_f }.reverse
-      render json: @advs
-    else
-      render status: 404, json: { status: :could_not_find }
     end
+
+    @advs = response.sort_by { |player| player[:ws].to_f }.reverse
+    render json: @advs
   end
 
   def salaries
-    if @memberships
-      response = []
+    return render_404 if @memberships.nil?
+    response = []
 
-      @memberships.each do |membership|
-        player = Player.find(membership.player_id)
-        team = Team.find(membership.team_id)
+    @memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
 
-        entry = { name: player.name, team: team.br_id, salary: membership.salary }
+      entry = { name: player.name, team: team.br_id, salary: membership.salary }
 
-        response << entry
-      end
-
-      @salaries = response.sort_by { |player| player[:salary].to_f }.reverse
-      render json: @salaries
-    else
-      render status: 404, json: { status: :could_not_find }
+      response << entry
     end
+
+    @salaries = response.sort_by { |player| player[:salary].to_f }.reverse
+    render json: @salaries
   end
 
   def win_shares
-    if @memberships
-      response = []
+    return render_404 if @memberships.nil?
+    response = []
 
-      @memberships.each do |membership|
-        player = Player.find(membership.player_id)
-        team = Team.find(membership.team_id)
-        adv = Adv.find_by(membership_id: membership.id)
+    @memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      adv = Adv.find_by(membership_id: membership.id)
 
-        if adv
-          win_shares = adv[:ws]
-          entry = { name: player.name, team: team.br_id, ws: win_shares }
-          response << entry
-        else
-          entry = { name: player.name, team: team.br_id, ws: 0 }
-          response << entry
-        end
+      if adv
+        win_shares = adv[:ws]
+        entry = { name: player.name, team: team.br_id, ws: win_shares }
+        response << entry
+      else
+        entry = { name: player.name, team: team.br_id, ws: 0 }
+        response << entry
       end
-
-      @win_shares = response.sort_by { |player| player[:ws].to_f }.reverse
-      render json: @win_shares
-    else
-      render status: 404, json: { status: :could_not_find }
     end
+
+    @win_shares = response.sort_by { |player| player[:ws].to_f }.reverse
+    render json: @win_shares
   end
 
   def win_shares_index
-    if @memberships
-      response = []
+    return render_404 if @memberships.nil?
+    response = []
 
-      @memberships.each do |membership|
-        player = Player.find(membership.player_id)
-        team = Team.find(membership.team_id)
-        adv = Adv.find_by(membership_id: membership.id)
-        salary = membership[:salary].to_i
+    @memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      adv = Adv.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
 
-        if adv && salary > 0
-          win_shares = adv[:ws]
+      if adv && salary > 0
+        win_shares = adv[:ws]
 
-          ws_index = win_shares / salary
-          ws_index *= 1000000
-          ws_index = (ws_index * 100).round / 100.0
+        ws_index = win_shares / salary
+        ws_index *= 1000000
+        ws_index = (ws_index * 100).round / 100.0
 
-          entry = { name: player.name, team: team.br_id, salary: salary, ws: win_shares, ws_index: ws_index }
-          response << entry
-        else
-          entry = { name: player.name, team: team.br_id, salary: salary, ws: 0, ws_index: 0 }
-          response << entry
-        end
+        entry = { name: player.name, team: team.br_id, salary: salary, ws: win_shares, ws_index: ws_index }
+        response << entry
+      else
+        entry = { name: player.name, team: team.br_id, salary: salary, ws: 0, ws_index: 0 }
+        response << entry
       end
-
-      @ws_index = response.sort_by { |player| player[:ws_index].to_f }.reverse
-      render json: @ws_index
-    else
-      render status: 404, json: { status: :could_not_find }
     end
+
+    @ws_index = response.sort_by { |player| player[:ws_index].to_f }.reverse
+    render json: @ws_index
   end
 
   def cost_per_point
-    if @memberships
-      response = []
+    return render_404 if @memberships.nil?
+    response = []
 
-      @memberships.each do |membership|
-        player = Player.find(membership.player_id)
-        team = Team.find(membership.team_id)
-        stat = Stat.find_by(membership_id: membership.id)
-        salary = membership[:salary].to_i
+    @memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
 
-        if stat && salary > 0
-          points = stat[:pts]
+      if stat && salary > 0
+        points = stat[:pts]
 
-          if points > 0
-            cpp = salary / points
-            entry = { name: player.name, team: team.br_id, salary: salary, pts: points, cpp: cpp }
-          else
-            entry = { name: player.name, team: team.br_id, salary: salary, pts: 0, cpp: 0 }
-          end
-          response << entry
+        if points > 0
+          cpp = salary / points
+          entry = { name: player.name, team: team.br_id, salary: salary, pts: points, cpp: cpp }
         else
           entry = { name: player.name, team: team.br_id, salary: salary, pts: 0, cpp: 0 }
-          response << entry
         end
+        response << entry
+      else
+        entry = { name: player.name, team: team.br_id, salary: salary, pts: 0, cpp: 0 }
+        response << entry
       end
-
-      @cpp = response.sort_by { |player| player[:cpp].to_f }.reverse
-      render json: @cpp
-    else
-      render status: 404, json: { status: :could_not_find }
     end
+
+    @cpp = response.sort_by { |player| player[:cpp].to_f }.reverse
+    render json: @cpp
   end
 
   def cost_per_assist
-    if @memberships
-      response = []
+    return render_404 if @memberships.nil?
+    response = []
 
-      @memberships.each do |membership|
-        player = Player.find(membership.player_id)
-        team = Team.find(membership.team_id)
-        stat = Stat.find_by(membership_id: membership.id)
-        salary = membership[:salary].to_i
+    @memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
 
-        if stat && salary > 0
-          assists = stat[:ast]
+      if stat && salary > 0
+        assists = stat[:ast]
 
-          if assists > 0
-            cpa = salary / assists
-            entry = { name: player.name, team: team.br_id, salary: salary, ast: assists, cpa: cpa }
-          else
-            entry = { name: player.name, team: team.br_id, salary: salary, ast: 0, cpa: 0 }
-          end
-          response << entry
+        if assists > 0
+          cpa = salary / assists
+          entry = { name: player.name, team: team.br_id, salary: salary, ast: assists, cpa: cpa }
         else
           entry = { name: player.name, team: team.br_id, salary: salary, ast: 0, cpa: 0 }
-          response << entry
         end
+        response << entry
+      else
+        entry = { name: player.name, team: team.br_id, salary: salary, ast: 0, cpa: 0 }
+        response << entry
       end
-
-      @cpa = response.sort_by { |player| player[:cpa].to_f }.reverse
-      render json: @cpa
-    else
-      render status: 404, json: { status: :could_not_find }
     end
+
+    @cpa = response.sort_by { |player| player[:cpa].to_f }.reverse
+    render json: @cpa
   end
 
   def cost_per_rebound
-    if @memberships
-      response = []
+    return render_404 if @memberships.nil?
+    response = []
 
-      @memberships.each do |membership|
-        player = Player.find(membership.player_id)
-        team = Team.find(membership.team_id)
-        stat = Stat.find_by(membership_id: membership.id)
-        salary = membership[:salary].to_i
+    @memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
 
-        if stat && salary > 0
-          rebounds = stat[:trb]
+      if stat && salary > 0
+        rebounds = stat[:trb]
 
-          if rebounds > 0
-            cpr = salary / rebounds
-            entry = { name: player.name, team: team.br_id, salary: salary, trb: rebounds, cpr: cpr }
-          else
-            entry = { name: player.name, team: team.br_id, salary: salary, trb: 0, cpr: 0 }
-          end
-            response << entry
+        if rebounds > 0
+          cpr = salary / rebounds
+          entry = { name: player.name, team: team.br_id, salary: salary, trb: rebounds, cpr: cpr }
         else
           entry = { name: player.name, team: team.br_id, salary: salary, trb: 0, cpr: 0 }
-          response << entry
         end
+          response << entry
+      else
+        entry = { name: player.name, team: team.br_id, salary: salary, trb: 0, cpr: 0 }
+        response << entry
       end
-
-      @cpr = response.sort_by { |player| player[:cpr].to_f }.reverse
-      render json: @cpr
-    else
-      render status: 404, json: { status: :could_not_find }
     end
+
+    @cpr = response.sort_by { |player| player[:cpr].to_f }.reverse
+    render json: @cpr
   end
 
   def cost_per_block
-    if @memberships
-      response = []
+    return render_404 if @memberships.nil?
+    response = []
 
-      @memberships.each do |membership|
-        player = Player.find(membership.player_id)
-        team = Team.find(membership.team_id)
-        stat = Stat.find_by(membership_id: membership.id)
-        salary = membership[:salary].to_i
+    @memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
 
-        if stat && salary > 0
-          blocks = stat[:blk]
+      if stat && salary > 0
+        blocks = stat[:blk]
 
-          if blocks > 0
-            cpb = salary / blocks
-            entry = { name: player.name, team: team.br_id, salary: salary, blk: blocks, cpb: cpb }
-          else
-            entry = { name: player.name, team: team.br_id, salary: salary, blk: 0, cpb: 0 }
-          end
-            response << entry
+        if blocks > 0
+          cpb = salary / blocks
+          entry = { name: player.name, team: team.br_id, salary: salary, blk: blocks, cpb: cpb }
         else
           entry = { name: player.name, team: team.br_id, salary: salary, blk: 0, cpb: 0 }
-          response << entry
         end
+          response << entry
+      else
+        entry = { name: player.name, team: team.br_id, salary: salary, blk: 0, cpb: 0 }
+        response << entry
       end
-
-      @cpb = response.sort_by { |player| player[:cpb].to_f }.reverse
-      render json: @cpb
-    else
-      render status: 404, json: { status: :could_not_find }
     end
+
+    @cpb = response.sort_by { |player| player[:cpb].to_f }.reverse
+    render json: @cpb
   end
 
   def cost_per_minute
-    if @memberships
-      response = []
+    return render_404 if @memberships.nil?
+    response = []
 
-      @memberships.each do |membership|
-        player = Player.find(membership.player_id)
-        team = Team.find(membership.team_id)
-        stat = Stat.find_by(membership_id: membership.id)
-        salary = membership[:salary].to_i
+    @memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
 
-        if stat && salary > 0
-          minutes = stat[:min]
+      if stat && salary > 0
+        minutes = stat[:min]
 
-          if minutes > 0
-            cpm = salary / minutes
-            entry = { name: player.name, team: team.br_id, salary: salary, min: minutes, cpm: cpm }
-          else
-            entry = { name: player.name, team: team.br_id, salary: salary, min: 0, cpm: 0 }
-          end
-            response << entry
+        if minutes > 0
+          cpm = salary / minutes
+          entry = { name: player.name, team: team.br_id, salary: salary, min: minutes, cpm: cpm }
         else
           entry = { name: player.name, team: team.br_id, salary: salary, min: 0, cpm: 0 }
-          response << entry
         end
+          response << entry
+      else
+        entry = { name: player.name, team: team.br_id, salary: salary, min: 0, cpm: 0 }
+        response << entry
       end
-
-      @cpm = response.sort_by { |player| player[:cpm].to_f }.reverse
-      render json: @cpm
-    else
-      render status: 404, json: { status: :could_not_find }
     end
+
+    @cpm = response.sort_by { |player| player[:cpm].to_f }.reverse
+    render json: @cpm
   end
 
   private

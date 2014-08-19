@@ -46,7 +46,7 @@ namespace :db do
     }
 
     # br_id: unique team ID in the online database (0-29)
-    br_id = 25
+    br_id = 18
 
     attrs[:@db_team] = BBall.persistTeam(br_id)
 
