@@ -40,32 +40,54 @@ class SeasonsController < ApplicationController
     memberships.each do |membership|
       player = Player.find(membership.player_id)
       team = Team.find(membership.team_id)
-
       adv = Adv.find_by(membership_id: membership.id)
 
       if adv
         win_shares = adv[:ws]
-        entry = { name: player.name, team: team.br_id, win_shares: win_shares }
+        entry = { name: player.name, team: team.br_id, ws: win_shares }
         response << entry
       else
-        entry = { name: player.name, team: team.br_id, win_shares: 0 }
+        entry = { name: player.name, team: team.br_id, ws: 0 }
         response << entry
       end
 
     end
 
-    @win_shares = response.sort_by { |player| player[:win_shares].to_f }.reverse
+    @win_shares = response.sort_by { |player| player[:ws].to_f }.reverse
     render json: @win_shares
   end
 
+  def show_cost_per_win_share
+    response = []
 
+    memberships = Membership.where(season_id: @season.id)
 
+    memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      adv = Adv.find_by(membership_id: membership.id)
 
+      if adv
+        win_shares = adv[:ws]
+        salary = membership[:salary]
 
+        if salary > 0
+          cpws = win_shares / salary
+          cpws *= 1000000
+          cpws = (cpws * 100).round / 100.0
 
+          entry = { name: player.name, team: team.br_id, salary: salary, ws: win_shares, cpws: cpws }
+          response << entry
+        end
+      else
+        entry = { name: player.name, team: team.br_id, salary: salary, ws: 0, cpws: 0 }
+        response << entry
+      end
+    end
 
-
-
+    @cpws = response.sort_by { |player| player[:cpws].to_f }.reverse
+    render json: @cpws
+  end
 
   private
 
