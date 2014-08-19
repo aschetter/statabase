@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get '/seasons/:season_id/teams/:id', to: 'teams#show'
   get '/seasons/:season_id/teams/:id/salaries', to: 'teams#show_salaries'
   get '/seasons/:season_id/teams/:id/win_shares', to: 'teams#show_win_shares'
+  get '/seasons/:season_id/teams/:id/win_shares_index', to: 'teams#show_win_shares_index'
 
 
 
