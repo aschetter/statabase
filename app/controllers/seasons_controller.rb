@@ -242,16 +242,6 @@ class SeasonsController < ApplicationController
     render json: @cpm
   end
 
-
-
-
-
-
-
-
-
-
-
   private
 
   def set_season
