@@ -4,7 +4,8 @@ Rails.application.routes.draw do
   get '/seasons/:id', to: 'seasons#show'
   get '/seasons/:id/salaries', to: 'seasons#show_salaries'
   get '/seasons/:id/win_shares', to: 'seasons#show_win_shares'
-  get '/seasons/:id/cost_per_win_share', to: 'seasons#show_cost_per_win_share'
+  get '/seasons/:id/win_shares_index', to: 'seasons#show_win_shares_index'
+  get '/seasons/:id/cost_per_point', to: 'seasons#show_cost_per_point'
 
 
   # resources :seasons, only: [:index, :show] do

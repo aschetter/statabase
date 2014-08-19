@@ -57,7 +57,7 @@ class SeasonsController < ApplicationController
     render json: @win_shares
   end
 
-  def show_cost_per_win_share
+  def show_win_shares_index
     response = []
 
     memberships = Membership.where(season_id: @season.id)
@@ -66,28 +66,67 @@ class SeasonsController < ApplicationController
       player = Player.find(membership.player_id)
       team = Team.find(membership.team_id)
       adv = Adv.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
 
-      if adv
+      if adv && salary > 0
         win_shares = adv[:ws]
-        salary = membership[:salary]
 
-        if salary > 0
-          cpws = win_shares / salary
-          cpws *= 1000000
-          cpws = (cpws * 100).round / 100.0
+        ws_index = win_shares / salary
+        ws_index *= 1000000
+        ws_index = (ws_index * 100).round / 100.0
 
-          entry = { name: player.name, team: team.br_id, salary: salary, ws: win_shares, cpws: cpws }
-          response << entry
-        end
+        entry = { name: player.name, team: team.br_id, salary: salary, ws: win_shares, ws_index: ws_index }
+        response << entry
       else
-        entry = { name: player.name, team: team.br_id, salary: salary, ws: 0, cpws: 0 }
+        entry = { name: player.name, team: team.br_id, salary: salary, ws: 0, ws_index: 0 }
         response << entry
       end
     end
 
-    @cpws = response.sort_by { |player| player[:cpws].to_f }.reverse
-    render json: @cpws
+    @ws_index = response.sort_by { |player| player[:ws_index].to_f }.reverse
+    render json: @ws_index
   end
+
+  def show_cost_per_point
+    response = []
+
+    memberships = Membership.where(season_id: @season.id)
+
+    memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
+
+      if stat && salary > 0
+        points = stat[:pts]
+
+        puts points
+        puts salary
+
+        cpp = salary / points
+
+        entry = { name: player.name, team: team.br_id, salary: salary, pts: points, cpp: cpp }
+        response << entry
+      else
+        entry = { name: player.name, team: team.br_id, salary: salary, pts: 0, cpp: 0 }
+        response << entry
+      end
+    end
+
+    @cpp = response.sort_by { |player| player[:cpp].to_f }.reverse
+    render json: @cpp
+  end
+
+
+
+
+
+
+
+
+
+
 
   private
 
