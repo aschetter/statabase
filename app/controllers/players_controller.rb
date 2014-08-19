@@ -52,6 +52,31 @@ class PlayersController < ApplicationController
     end
   end
 
+  def show_win_shares_index
+    if @player
+
+      membership = Membership.find_by(season_id: @season.id, team_id: @team.id)
+      adv = Adv.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
+
+        if adv && salary > 0
+          win_shares = adv[:ws]
+
+          ws_index = win_shares / salary
+          ws_index *= 1000000
+          ws_index = (ws_index * 100).round / 100.0
+
+          @ws_index = { name: @player.name, salary: salary, ws: win_shares, ws_index: ws_index }
+        else
+          @ws_index = { name: @player.name, salary: salary, ws: 0, ws_index: 0 }
+        end
+
+      render json: @ws_index
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
 
 
 
