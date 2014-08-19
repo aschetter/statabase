@@ -330,12 +330,14 @@ class TeamsController < ApplicationController
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
       end
-    else
+    elsif params[:id]
       begin
         @team = @season.teams.find_by(br_id: params[:id].upcase)
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
       end
+    else
+      @team = nil
     end
   end
 
