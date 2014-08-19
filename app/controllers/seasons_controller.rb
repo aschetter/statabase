@@ -1,5 +1,6 @@
 class SeasonsController < ApplicationController
   before_action :set_season
+  before_action :set_memberships
 
   def index
     @seasons = Season.all
@@ -15,12 +16,10 @@ class SeasonsController < ApplicationController
   end
 
   def show_stats
-    if @season
+    if @memberships
       response = []
 
-      memberships = Membership.where(season_id: @season.id)
-
-      memberships.each do |membership|
+      @memberships.each do |membership|
         stat = Stat.find_by(membership_id: membership.id)
 
         if stat
@@ -36,12 +35,10 @@ class SeasonsController < ApplicationController
   end
 
   def show_advanceds
-    if @season
+    if @memberships
       response = []
 
-      memberships = Membership.where(season_id: @season.id)
-
-      memberships.each do |membership|
+      @memberships.each do |membership|
         adv = Adv.find_by(membership_id: membership.id)
 
         if adv
@@ -57,12 +54,10 @@ class SeasonsController < ApplicationController
   end
 
   def show_salaries
-    if @season
+    if @memberships
       response = []
 
-      memberships = Membership.where(season_id: @season.id)
-
-      memberships.each do |membership|
+      @memberships.each do |membership|
         player = Player.find(membership.player_id)
         team = Team.find(membership.team_id)
 
@@ -79,12 +74,10 @@ class SeasonsController < ApplicationController
   end
 
   def show_win_shares
-    if @season
+    if @memberships
       response = []
 
-      memberships = Membership.where(season_id: @season.id)
-
-      memberships.each do |membership|
+      @memberships.each do |membership|
         player = Player.find(membership.player_id)
         team = Team.find(membership.team_id)
         adv = Adv.find_by(membership_id: membership.id)
@@ -107,12 +100,10 @@ class SeasonsController < ApplicationController
   end
 
   def show_win_shares_index
-    if @season
+    if @memberships
       response = []
 
-      memberships = Membership.where(season_id: @season.id)
-
-      memberships.each do |membership|
+      @memberships.each do |membership|
         player = Player.find(membership.player_id)
         team = Team.find(membership.team_id)
         adv = Adv.find_by(membership_id: membership.id)
@@ -141,12 +132,10 @@ class SeasonsController < ApplicationController
   end
 
   def show_cost_per_point
-    if @season
+    if @memberships
       response = []
 
-      memberships = Membership.where(season_id: @season.id)
-
-      memberships.each do |membership|
+      @memberships.each do |membership|
         player = Player.find(membership.player_id)
         team = Team.find(membership.team_id)
         stat = Stat.find_by(membership_id: membership.id)
@@ -176,12 +165,10 @@ class SeasonsController < ApplicationController
   end
 
   def show_cost_per_assist
-    if @season
+    if @memberships
       response = []
 
-      memberships = Membership.where(season_id: @season.id)
-
-      memberships.each do |membership|
+      @memberships.each do |membership|
         player = Player.find(membership.player_id)
         team = Team.find(membership.team_id)
         stat = Stat.find_by(membership_id: membership.id)
@@ -211,12 +198,10 @@ class SeasonsController < ApplicationController
   end
 
   def show_cost_per_rebound
-    if @season
+    if @memberships
       response = []
 
-      memberships = Membership.where(season_id: @season.id)
-
-      memberships.each do |membership|
+      @memberships.each do |membership|
         player = Player.find(membership.player_id)
         team = Team.find(membership.team_id)
         stat = Stat.find_by(membership_id: membership.id)
@@ -246,12 +231,10 @@ class SeasonsController < ApplicationController
   end
 
   def show_cost_per_block
-    if @season
+    if @memberships
       response = []
 
-      memberships = Membership.where(season_id: @season.id)
-
-      memberships.each do |membership|
+      @memberships.each do |membership|
         player = Player.find(membership.player_id)
         team = Team.find(membership.team_id)
         stat = Stat.find_by(membership_id: membership.id)
@@ -281,12 +264,10 @@ class SeasonsController < ApplicationController
   end
 
   def show_cost_per_minute
-    if @season
+    if @memberships
       response = []
 
-      memberships = Membership.where(season_id: @season.id)
-
-      memberships.each do |membership|
+      @memberships.each do |membership|
         player = Player.find(membership.player_id)
         team = Team.find(membership.team_id)
         stat = Stat.find_by(membership_id: membership.id)
@@ -331,6 +312,17 @@ class SeasonsController < ApplicationController
       rescue ActiveRecord::RecordNotFound => e
         @season = nil
       end
+    end
+  end
+
+  def set_memberships
+    if !@season
+      set_season
+    end
+    begin
+      @memberships = Membership.where(season_id: @season.id)
+    rescue ActiveRecord::RecordNotFound => e
+      @memberships = nil
     end
   end
 end
