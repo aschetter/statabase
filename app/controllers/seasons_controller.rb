@@ -15,7 +15,7 @@ class SeasonsController < ApplicationController
     end
   end
 
-  def show_stats
+  def stats
     if @memberships
       response = []
 
