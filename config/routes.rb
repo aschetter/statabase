@@ -20,13 +20,24 @@ Rails.application.routes.draw do
 
   ###### TEAMS ROUTES ########
 
-  # resources :seasons do
-  #   resources :teams
-  #   # /seasons/43/stats
-  #   get 'stats', :on => :member
-  #   # /seasons/top
-  #   get 'top', :on => :collection
-  # end
+
+  # get '/seasons/:season_id/teams', to: 'teams#index'
+  # get '/seasons/:season_id/teams/:id', to: 'teams#show'
+
+  # get '/seasons/:season_id/teams/:id/stats', to: 'teams#stats'
+  # get '/seasons/:season_id/teams/:id/advanced_stats', to: 'teams#advanceds'
+
+  # get '/seasons/:season_id/teams/:id/salaries', to: 'teams#salaries'
+  # get '/seasons/:season_id/teams/:id/win_shares', to: 'teams#win_shares'
+  # get '/seasons/:season_id/teams/:id/win_shares_index', to: 'teams#win_shares_index'
+
+  # get '/seasons/:season_id/teams/:id/cost_per_point', to: 'teams#cost_per_point'
+  # get '/seasons/:season_id/teams/:id/cost_per_assist', to: 'teams#cost_per_assist'
+  # get '/seasons/:season_id/teams/:id/cost_per_rebound', to: 'teams#cost_per_rebound'
+  # get '/seasons/:season_id/teams/:id/cost_per_block', to: 'teams#cost_per_block'
+  # get '/seasons/:season_id/teams/:id/cost_per_minute', to: 'teams#cost_per_minute'
+
+  ###### PLAYERS ROUTES ########
 
   resources :seasons, only: [ :index, :show ] do
     get 'stats', :on => :member
@@ -55,26 +66,23 @@ Rails.application.routes.draw do
       get 'cost_per_rebound', :on => :member
       get 'cost_per_block', :on => :member
       get 'cost_per_minute', :on => :member
+
+      resources :players, only: [ :index, :show ] do
+        get 'stats', :on => :member
+        get 'advanced_stats', :on => :member
+
+        get 'salaries', :on => :member
+        get 'win_shares', :on => :member
+        get 'win_shares_index', :on => :member
+
+        get 'cost_per_point', :on => :member
+        get 'cost_per_assist', :on => :member
+        get 'cost_per_rebound', :on => :member
+        get 'cost_per_block', :on => :member
+        get 'cost_per_minute', :on => :member
+      end
     end
   end
-
-  # get '/seasons/:season_id/teams', to: 'teams#index'
-  # get '/seasons/:season_id/teams/:id', to: 'teams#show'
-
-  # get '/seasons/:season_id/teams/:id/stats', to: 'teams#stats'
-  # get '/seasons/:season_id/teams/:id/advanced_stats', to: 'teams#advanceds'
-
-  # get '/seasons/:season_id/teams/:id/salaries', to: 'teams#salaries'
-  # get '/seasons/:season_id/teams/:id/win_shares', to: 'teams#win_shares'
-  # get '/seasons/:season_id/teams/:id/win_shares_index', to: 'teams#win_shares_index'
-
-  # get '/seasons/:season_id/teams/:id/cost_per_point', to: 'teams#cost_per_point'
-  # get '/seasons/:season_id/teams/:id/cost_per_assist', to: 'teams#cost_per_assist'
-  # get '/seasons/:season_id/teams/:id/cost_per_rebound', to: 'teams#cost_per_rebound'
-  # get '/seasons/:season_id/teams/:id/cost_per_block', to: 'teams#cost_per_block'
-  # get '/seasons/:season_id/teams/:id/cost_per_minute', to: 'teams#cost_per_minute'
-
-  ###### PLAYERS ROUTES ########
 
   # get '/seasons/:season_id/teams/:team_id/players', to: 'players#index'
   # get '/seasons/:season_id/teams/:team_id/players/:id', to: 'players#show'

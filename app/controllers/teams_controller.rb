@@ -1,6 +1,6 @@
 class TeamsController < ApplicationController
   before_action :set_season
-  before_action :is_number?
+  before_action :team_is_number?
   before_action :set_team
   before_action :set_memberships
 
@@ -315,7 +315,7 @@ class TeamsController < ApplicationController
     end
   end
 
-  def is_number?
+  def team_is_number?
     params[:id].to_f.to_s == params[:id].to_s || params[:id].to_i.to_s == params[:id].to_s
   end
 
@@ -324,7 +324,7 @@ class TeamsController < ApplicationController
       set_season
     end
 
-    if is_number?
+    if team_is_number?
       begin
         @team = @season.teams.find(params[:id])
       rescue ActiveRecord::RecordNotFound => e

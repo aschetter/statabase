@@ -1,7 +1,8 @@
 class PlayersController < ApplicationController
   before_action :set_season
-  before_action :is_number?
+  before_action :team_is_number?
   before_action :set_team
+  before_action :player_is_number?
   before_action :set_player
   before_action :set_membership
 
@@ -23,7 +24,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def show_stats
+  def stats
     if @membership
 
       stat = Stat.find_by(membership_id: @membership.id)
@@ -39,7 +40,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def show_advanceds
+  def advanced_stats
     if @membership
 
       adv = Adv.find_by(membership_id: @membership.id)
@@ -55,7 +56,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def show_salaries
+  def salaries
     if @membership
 
       @salary = { name: @player.name, salary: @membership.salary }
@@ -66,7 +67,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def show_win_shares
+  def win_shares
     if @membership
 
       adv = Adv.find_by(membership_id: @membership.id)
@@ -84,11 +85,11 @@ class PlayersController < ApplicationController
     end
   end
 
-  def show_win_shares_index
+  def win_shares_index
     if @membership
 
       adv = Adv.find_by(membership_id: @membership.id)
-      salary = membership[:salary].to_i
+      salary = @membership[:salary].to_i
 
       if adv && salary > 0
         win_shares = adv[:ws]
@@ -108,7 +109,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def show_cost_per_point
+  def cost_per_point
     if @membership
 
       stat = Stat.find_by(membership_id: @membership.id)
@@ -133,7 +134,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def show_cost_per_assist
+  def cost_per_assist
     if @membership
 
       stat = Stat.find_by(membership_id: @membership.id)
@@ -158,7 +159,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def show_cost_per_rebound
+  def cost_per_rebound
     if @membership
 
       stat = Stat.find_by(membership_id: @membership.id)
@@ -183,7 +184,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def show_cost_per_block
+  def cost_per_block
     if @membership
 
       stat = Stat.find_by(membership_id: @membership.id)
@@ -208,7 +209,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def show_cost_per_minute
+  def cost_per_minute
     if @membership
 
       stat = Stat.find_by(membership_id: @membership.id)
@@ -252,7 +253,7 @@ class PlayersController < ApplicationController
     end
   end
 
-  def is_number?
+  def team_is_number?
     params[:team_id].to_f.to_s == params[:team_id].to_s || params[:team_id].to_i.to_s == params[:team_id].to_s
   end
 
@@ -261,19 +262,23 @@ class PlayersController < ApplicationController
       set_season
     end
 
-    if is_number?
-      begin
-        @team = @season.teams.find_by(br_id: params[:team_id].upcase)
-      rescue ActiveRecord::RecordNotFound => e
-        @team = nil
-      end
-    else
+    if team_is_number?
       begin
         @team = @season.teams.find(params[:team_id])
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
       end
+    else
+      begin
+        @team = @season.teams.find_by(br_id: params[:team_id].upcase)
+      rescue ActiveRecord::RecordNotFound => e
+        @team = nil
+      end
     end
+  end
+
+  def player_is_number?
+    params[:id].to_f.to_s == params[:id].to_s || params[:id].to_i.to_s == params[:id].to_s
   end
 
   def set_player
@@ -283,16 +288,16 @@ class PlayersController < ApplicationController
     if !@team
       set_team
     end
-    player_id = params[:id].to_i
-    if player_id < 1
+
+    if player_is_number?
       begin
-        @player = @team.players.find_by(name: params[:id])
+        @player = @team.players.find(params[:id])
       rescue ActiveRecord::RecordNotFound => e
         @player = nil
       end
     else
       begin
-        @player = @team.players.find(params[:id])
+        @player = @team.players.find_by(name: params[:id])
       rescue ActiveRecord::RecordNotFound => e
         @player = nil
       end
