@@ -5,6 +5,9 @@ Rails.application.routes.draw do
   get '/seasons', to: 'seasons#index'
   get '/seasons/:id', to: 'seasons#show'
 
+  get '/seasons/:id/stats', to: 'seasons#show_stats'
+  get '/seasons/:id/advanceds', to: 'seasons#show_advanceds'
+
   get '/seasons/:id/salaries', to: 'seasons#show_salaries'
   get '/seasons/:id/win_shares', to: 'seasons#show_win_shares'
   get '/seasons/:id/win_shares_index', to: 'seasons#show_win_shares_index'
