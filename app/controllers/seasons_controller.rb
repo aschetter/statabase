@@ -101,9 +101,12 @@ class SeasonsController < ApplicationController
       if stat && salary > 0
         points = stat[:pts]
 
-        cpp = salary / points
-
-        entry = { name: player.name, team: team.br_id, salary: salary, pts: points, cpp: cpp }
+        if points > 0
+          cpp = salary / points
+          entry = { name: player.name, team: team.br_id, salary: salary, pts: points, cpp: cpp }
+        else
+          entry = { name: player.name, team: team.br_id, salary: salary, pts: 0, cpp: 0 }
+        end
         response << entry
       else
         entry = { name: player.name, team: team.br_id, salary: salary, pts: 0, cpp: 0 }
@@ -129,9 +132,12 @@ class SeasonsController < ApplicationController
       if stat && salary > 0
         assists = stat[:ast]
 
-        cpa = salary / assists
-
-        entry = { name: player.name, team: team.br_id, salary: salary, ast: assists, cpa: cpa }
+        if assists > 0
+          cpa = salary / assists
+          entry = { name: player.name, team: team.br_id, salary: salary, ast: assists, cpa: cpa }
+        else
+          entry = { name: player.name, team: team.br_id, salary: salary, ast: 0, cpa: 0 }
+        end
         response << entry
       else
         entry = { name: player.name, team: team.br_id, salary: salary, ast: 0, cpa: 0 }
@@ -141,6 +147,68 @@ class SeasonsController < ApplicationController
 
     @cpa = response.sort_by { |player| player[:cpa].to_f }.reverse
     render json: @cpa
+  end
+
+  def show_cost_per_rebound
+    response = []
+
+    memberships = Membership.where(season_id: @season.id)
+
+    memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
+
+      if stat && salary > 0
+        rebounds = stat[:trb]
+
+        if rebounds > 0
+          cpr = salary / rebounds
+          entry = { name: player.name, team: team.br_id, salary: salary, trb: rebounds, cpr: cpr }
+        else
+          entry = { name: player.name, team: team.br_id, salary: salary, trb: 0, cpr: 0 }
+        end
+          response << entry
+      else
+        entry = { name: player.name, team: team.br_id, salary: salary, trb: 0, cpr: 0 }
+        response << entry
+      end
+    end
+
+    @cpr = response.sort_by { |player| player[:cpr].to_f }.reverse
+    render json: @cpr
+  end
+
+  def show_cost_per_block
+    response = []
+
+    memberships = Membership.where(season_id: @season.id)
+
+    memberships.each do |membership|
+      player = Player.find(membership.player_id)
+      team = Team.find(membership.team_id)
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
+
+      if stat && salary > 0
+        blocks = stat[:blk]
+
+        if blocks > 0
+          cpb = salary / blocks
+          entry = { name: player.name, team: team.br_id, salary: salary, blk: blocks, cpb: cpb }
+        else
+          entry = { name: player.name, team: team.br_id, salary: salary, blk: 0, cpb: 0 }
+        end
+          response << entry
+      else
+        entry = { name: player.name, team: team.br_id, salary: salary, blk: 0, cpb: 0 }
+        response << entry
+      end
+    end
+
+    @cpb = response.sort_by { |player| player[:cpb].to_f }.reverse
+    render json: @cpb
   end
 
 
