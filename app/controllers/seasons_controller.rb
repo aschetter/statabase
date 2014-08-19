@@ -35,19 +35,31 @@ class SeasonsController < ApplicationController
     end
   end
 
+  def show_advanceds
+    if @season
+      response = []
+
+      memberships = Membership.where(season_id: @season.id)
+
+      memberships.each do |membership|
+        adv = Adv.find_by(membership_id: membership.id)
+
+        if adv
+          response << adv
+        end
+      end
+
+      @advs = response.sort_by { |player| player[:ws].to_f }.reverse
+      render json: @advs
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
 
 
 
 
 
-
-        # {membership_id: membership[:id], age: membership[:age], gp: membership[:gp], gs: membership[:gs],
-        #   min: membership[:min], fg_made: membership[:fg_made], fg_att: membership[:fg_att], fg_pct: membership[:fg_pct],
-        #   three_made: membership[:three_made], three_att: membership[:three_att], three_pct: membership[:three_pct],
-        #   two_made: membership[:two_made], two_att: membership[:two_att], two_pct: membership[:two_pct],
-        #   ft_made: membership[:ft_made], ft_att: membership[:ft_att], ft_pct: membership[:ft_pct], orb: membership[:orb],
-        #   drb: membership[:drb], trb: membership[:trb], ast: membership[:ast], stl: membership[:stl], blk: membership[:blk],
-        #   tov: membership[:tov], pf: membership[:pf], pts: membership[:pts] }
 
 
 
