@@ -319,10 +319,13 @@ class SeasonsController < ApplicationController
     if !@season
       set_season
     end
-    begin
-      @memberships = Membership.where(season_id: @season.id)
-    rescue ActiveRecord::RecordNotFound => e
-      @memberships = nil
+
+    if params[:id]
+      begin
+        @memberships = Membership.where(season_id: @season.id)
+      rescue ActiveRecord::RecordNotFound => e
+        @memberships = nil
+      end
     end
   end
 end

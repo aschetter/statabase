@@ -317,8 +317,10 @@ class TeamsController < ApplicationController
     if !@season
       set_season
     end
+    
     team_id = params[:id].to_i
-    if team_id < 1
+
+    if team_id.class == String
       begin
         @team = @season.teams.find_by(br_id: params[:id].upcase)
       rescue ActiveRecord::RecordNotFound => e
@@ -340,10 +342,12 @@ class TeamsController < ApplicationController
     if !@team
       set_team
     end
-    begin
-      @memberships = Membership.where(season_id: @season.id, team_id: @team.id)
-    rescue ActiveRecord::RecordNotFound => e
-      @memberships = nil
+    if @team
+      begin
+        @memberships = Membership.where(season_id: @season.id, team_id: @team.id)
+      rescue ActiveRecord::RecordNotFound => e
+        @memberships = nil
+      end
     end
   end
 end
