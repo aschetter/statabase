@@ -157,6 +157,61 @@ class PlayersController < ApplicationController
     end
   end
 
+  def show_cost_per_block
+    if @player
+      response = []
+
+      membership = Membership.find_by(season_id: @season.id, team_id: @team.id)
+
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
+
+      if stat && salary > 0
+        blocks = stat[:blk]
+
+        if blocks > 0
+          cpb = salary / blocks
+          @cpb = { name: @player.name, salary: salary, blk: blocks, cpb: cpb }
+        else
+          @cpb = { name: @player.name, salary: salary, blk: 0, cpb: 0 }
+        end
+      else
+        @cpb = { name: @player.name, salary: salary, blk: 0, cpb: 0 }
+      end
+
+      render json: @cpb
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
+  def show_cost_per_minute
+    if @player
+
+      membership = Membership.find_by(season_id: @season.id, team_id: @team.id)
+
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
+
+      if stat && salary > 0
+        minutes = stat[:min]
+
+        if minutes > 0
+          cpm = salary / minutes
+          @cpm = { name: @player.name, salary: salary, min: minutes, cpm: cpm }
+        else
+          @cpm = { name: @player.name, salary: salary, min: 0, cpm: 0 }
+        end
+      else
+        @cpm = { name: @player.name, salary: salary, min: 0, cpm: 0 }
+      end
+
+      render json: @cpm
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
 
 
 
