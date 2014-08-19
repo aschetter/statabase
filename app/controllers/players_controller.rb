@@ -39,12 +39,12 @@ class PlayersController < ApplicationController
       membership = Membership.find_by(season_id: @season.id, team_id: @team.id)
       adv = Adv.find_by(membership_id: membership.id)
 
-        if adv
-          win_shares = adv[:ws]
-          @win_shares = { name: @player.name, ws: win_shares }
-        else
-          @win_shares = { name: @player.name, ws: 0 }
-        end
+      if adv
+        win_shares = adv[:ws]
+        @win_shares = { name: @player.name, ws: win_shares }
+      else
+        @win_shares = { name: @player.name, ws: 0 }
+      end
 
       render json: @win_shares
     else
@@ -59,17 +59,17 @@ class PlayersController < ApplicationController
       adv = Adv.find_by(membership_id: membership.id)
       salary = membership[:salary].to_i
 
-        if adv && salary > 0
-          win_shares = adv[:ws]
+      if adv && salary > 0
+        win_shares = adv[:ws]
 
-          ws_index = win_shares / salary
-          ws_index *= 1000000
-          ws_index = (ws_index * 100).round / 100.0
+        ws_index = win_shares / salary
+        ws_index *= 1000000
+        ws_index = (ws_index * 100).round / 100.0
 
-          @ws_index = { name: @player.name, salary: salary, ws: win_shares, ws_index: ws_index }
-        else
-          @ws_index = { name: @player.name, salary: salary, ws: 0, ws_index: 0 }
-        end
+        @ws_index = { name: @player.name, salary: salary, ws: win_shares, ws_index: ws_index }
+      else
+        @ws_index = { name: @player.name, salary: salary, ws: 0, ws_index: 0 }
+      end
 
       render json: @ws_index
     else
@@ -84,20 +84,47 @@ class PlayersController < ApplicationController
       stat = Stat.find_by(membership_id: membership.id)
       salary = membership[:salary].to_i
 
-        if stat && salary > 0
-          points = stat[:pts]
+      if stat && salary > 0
+        points = stat[:pts]
 
-          if points > 0
-            cpp = salary / points
-            @cpp = { name: @player.name, salary: salary, pts: points, cpp: cpp }
-          else
-            @cpp = { name: @player.name, salary: salary, pts: 0, cpp: 0 }
-          end
+        if points > 0
+          cpp = salary / points
+          @cpp = { name: @player.name, salary: salary, pts: points, cpp: cpp }
         else
           @cpp = { name: @player.name, salary: salary, pts: 0, cpp: 0 }
         end
+      else
+        @cpp = { name: @player.name, salary: salary, pts: 0, cpp: 0 }
+      end
 
       render json: @cpp
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
+  def show_cost_per_assist
+    if @player
+
+      membership = Membership.find_by(season_id: @season.id, team_id: @team.id)
+
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
+
+      if stat && salary > 0
+        assists = stat[:ast]
+
+        if assists > 0
+          cpa = salary / assists
+          @cpa = { name: @player.name, salary: salary, ast: assists, cpa: cpa }
+        else
+          @cpa = { name: @player.name, salary: salary, ast: 0, cpa: 0 }
+        end
+      else
+        @cpa = { name: @player.name, salary: salary, ast: 0, cpa: 0 }
+      end
+
+      render json: @cpa
     else
       render status: 404, json: { status: :could_not_find }
     end
