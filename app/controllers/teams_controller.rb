@@ -19,6 +19,45 @@ class TeamsController < ApplicationController
     end
   end
 
+  def show_stats
+    if @season
+      response = []
+
+      memberships = Membership.where(season_id: @season.id, team_id: @team.id)
+
+      memberships.each do |membership|
+        stat = Stat.find_by(membership_id: membership.id)
+
+        if stat
+          response << stat
+        end
+      end
+
+      @stats = response.sort_by { |player| player[:pts].to_f }.reverse
+      render json: @stats
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   def show_salaries
     if @team
 

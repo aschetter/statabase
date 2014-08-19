@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   get '/seasons/:id', to: 'seasons#show'
 
   get '/seasons/:id/stats', to: 'seasons#show_stats'
-  get '/seasons/:id/advanceds', to: 'seasons#show_advanceds'
+  get '/seasons/:id/advanced_stats', to: 'seasons#show_advanceds'
 
   get '/seasons/:id/salaries', to: 'seasons#show_salaries'
   get '/seasons/:id/win_shares', to: 'seasons#show_win_shares'
@@ -22,6 +22,10 @@ Rails.application.routes.draw do
 
   get '/seasons/:season_id/teams', to: 'teams#index'
   get '/seasons/:season_id/teams/:id', to: 'teams#show'
+
+  get '/seasons/:season_id/teams/:id/stats', to: 'teams#show_stats'
+  get '/seasons/:season_id/teams/:id/advanced_stats', to: 'teams#show_advanceds'
+
   get '/seasons/:season_id/teams/:id/salaries', to: 'teams#show_salaries'
   get '/seasons/:season_id/teams/:id/win_shares', to: 'teams#show_win_shares'
   get '/seasons/:season_id/teams/:id/win_shares_index', to: 'teams#show_win_shares_index'

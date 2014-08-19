@@ -56,25 +56,6 @@ class SeasonsController < ApplicationController
     end
   end
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   def show_salaries
     if @season
       response = []
