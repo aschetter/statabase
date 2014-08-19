@@ -1,22 +1,18 @@
-require_relative './populate/persistSeason.rb'
-require_relative './populate/persistTeam.rb'
-require_relative './populate/persistSeasonTeam.rb'
-
 require_relative './populate/loadPage.rb'
 
-require_relative './populate/parsePlayers.rb'
-require_relative './populate/persistPlayers.rb'
+require_relative './populate/parseData/parsePlayers.rb'
+require_relative './populate/parseData/parseStats.rb'
+require_relative './populate/parseData/parseAdvanceds.rb'
+require_relative './populate/parseData/parseSalaries.rb'
 
-require_relative './populate/persistRoster.rb'
-
-require_relative './populate/parseStats.rb'
-require_relative './populate/persistStats.rb'
-
-require_relative './populate/parseAdvanceds.rb'
-require_relative './populate/persistAdvanceds.rb'
-
-require_relative './populate/parseSalaries.rb'
-require_relative './populate/persistSalaries.rb'
+require_relative './populate/persistData/persistSeason.rb'
+require_relative './populate/persistData/persistTeam.rb'
+require_relative './populate/persistData/persistSeasonTeam.rb'
+require_relative './populate/persistData/persistPlayers.rb'
+require_relative './populate/persistData/persistRoster.rb'
+require_relative './populate/persistData/persistStats.rb'
+require_relative './populate/persistData/persistAdvanceds.rb'
+require_relative './populate/persistData/persistSalaries.rb'
 
 require_relative './populate/displayResults.rb'
 
@@ -50,7 +46,7 @@ namespace :db do
     }
 
     # br_id: unique team ID in the online database (0-29)
-    br_id = 27
+    br_id = 25
 
     attrs[:@db_team] = BBall.persistTeam(br_id)
 
