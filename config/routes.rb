@@ -19,6 +19,12 @@ Rails.application.routes.draw do
   get '/seasons/:season_id/teams/:id/win_shares', to: 'teams#show_win_shares'
   get '/seasons/:season_id/teams/:id/win_shares_index', to: 'teams#show_win_shares_index'
 
+  get '/seasons/:season_id/teams/:id/cost_per_point', to: 'teams#show_cost_per_point'
+  get '/seasons/:season_id/teams/:id/cost_per_assist', to: 'teams#show_cost_per_assist'
+  get '/seasons/:season_id/teams/:id/cost_per_rebound', to: 'teams#show_cost_per_rebound'
+  get '/seasons/:season_id/teams/:id/cost_per_block', to: 'teams#show_cost_per_block'
+  get '/seasons/:season_id/teams/:id/cost_per_minute', to: 'teams#show_cost_per_minute'
+
 
 
 
