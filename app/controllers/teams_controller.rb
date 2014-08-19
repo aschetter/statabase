@@ -134,6 +134,40 @@ class TeamsController < ApplicationController
     end
   end
 
+  def show_cost_per_assist
+    if @team
+      response = []
+
+      memberships = Membership.where(season_id: @season.id, team_id: @team.id)
+
+      memberships.each do |membership|
+        player = Player.find(membership.player_id)
+        stat = Stat.find_by(membership_id: membership.id)
+        salary = membership[:salary].to_i
+
+        if stat && salary > 0
+          assists = stat[:ast]
+
+          if assists > 0
+            cpa = salary / assists
+            entry = { name: player.name, salary: salary, ast: assists, cpa: cpa }
+          else
+            entry = { name: player.name, salary: salary, ast: 0, cpa: 0 }
+          end
+          response << entry
+        else
+          entry = { name: player.name, salary: salary, ast: 0, cpa: 0 }
+          response << entry
+        end
+      end
+
+      @cpa = response.sort_by { |player| player[:cpa].to_f }.reverse
+      render json: @cpa
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
 
 
 
