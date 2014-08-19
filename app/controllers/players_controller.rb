@@ -20,6 +20,43 @@ class PlayersController < ApplicationController
     end
   end
 
+  def show_salaries
+    if @player
+
+      membership = @player.memberships.find_by(team_id: @team.id)
+      @salary = { name: @player.name, salary: membership.salary }
+
+      render json: @salary
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   private
 
   def set_season
@@ -46,7 +83,7 @@ class PlayersController < ApplicationController
     team_id = params[:team_id].to_i
     if team_id < 1
       begin
-        @team = @season.teams.find_by(br_id: params[:team_id])
+        @team = @season.teams.find_by(br_id: params[:team_id].upcase)
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
       end
