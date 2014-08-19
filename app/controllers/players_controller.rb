@@ -72,7 +72,7 @@ class PlayersController < ApplicationController
 
       @ws_index = { name: @player.name, salary: salary, ws: win_shares, ws_index: ws_index }
     else
-      return render_404
+      @ws_index = { name: @player.name, salary: salary, ws: win_shares, ws_index: 0 }
     end
     render json: @ws_index
   end
@@ -267,10 +267,12 @@ class PlayersController < ApplicationController
     if !@player
       set_player
     end
-    begin
-      @membership = Membership.find_by(season_id: @season.id, team_id: @team.id)
-    rescue ActiveRecord::RecordNotFound => e
-      @membership = nil
+    if @player
+      begin
+        @membership = Membership.find_by(season_id: @season.id, team_id: @team.id, player_id: @player.id)
+      rescue ActiveRecord::RecordNotFound => e
+        @membership = nil
+      end
     end
   end
 end
