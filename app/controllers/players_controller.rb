@@ -38,21 +38,22 @@ class PlayersController < ApplicationController
     end
   end
 
+  def show_advanceds
+    if @player
 
+      membership = @player.memberships.find_by(season_id: @season.id, team_id: @team.id)
+      adv = Adv.find_by(membership_id: membership.id)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+      if adv
+        @advs = adv
+        render json: @advs
+      else
+        render status: 404, json: { status: :could_not_find }
+      end
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
 
   def show_salaries
     if @player
