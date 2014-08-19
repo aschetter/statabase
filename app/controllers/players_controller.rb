@@ -130,6 +130,33 @@ class PlayersController < ApplicationController
     end
   end
 
+  def show_cost_per_rebound
+    if @player
+
+      membership = Membership.find_by(season_id: @season.id, team_id: @team.id)
+
+      stat = Stat.find_by(membership_id: membership.id)
+      salary = membership[:salary].to_i
+
+      if stat && salary > 0
+        rebounds = stat[:trb]
+
+        if rebounds > 0
+          cpr = salary / rebounds
+          @cpr = { name: @player.name, salary: salary, trb: rebounds, cpr: cpr }
+        else
+          @cpr = { name: @player.name, salary: salary, trb: 0, cpr: 0 }
+        end
+      else
+        @cpr = { name: @player.name, salary: salary, trb: 0, cpr: 0 }
+      end
+
+      render json: @cpr
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
 
 
 
