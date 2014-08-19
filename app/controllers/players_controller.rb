@@ -5,6 +5,7 @@ class PlayersController < ApplicationController
 
   def index
     if @team
+
       @players = @team.players.all
       render json: @players
     else
@@ -23,10 +24,29 @@ class PlayersController < ApplicationController
   def show_salaries
     if @player
 
-      membership = @player.memberships.find_by(team_id: @team.id)
+      membership = @player.memberships.find_by(season_id: @season.id, team_id: @team.id)
       @salary = { name: @player.name, salary: membership.salary }
 
       render json: @salary
+    else
+      render status: 404, json: { status: :could_not_find }
+    end
+  end
+
+  def show_win_shares
+    if @player
+
+      membership = Membership.find_by(season_id: @season.id, team_id: @team.id)
+      adv = Adv.find_by(membership_id: membership.id)
+
+        if adv
+          win_shares = adv[:ws]
+          @win_shares = { name: @player.name, ws: win_shares }
+        else
+          @win_shares = { name: @player.name, ws: 0 }
+        end
+
+      render json: @win_shares
     else
       render status: 404, json: { status: :could_not_find }
     end
