@@ -13,7 +13,9 @@ Rails.application.routes.draw do
   get '/seasons/:id/cost_per_block', to: 'seasons#show_cost_per_block'
   get '/seasons/:id/cost_per_minute', to: 'seasons#show_cost_per_minute'
 
-  get '/seasons/:id/teams', to: 'teams#index'
+  get '/seasons/:season_id/teams', to: 'teams#index'
+  get '/seasons/:season_id/teams/:id', to: 'teams#show'
+  get '/seasons/:season_id/teams/:id/salaries', to: 'teams#show_salaries'
 
 
 
