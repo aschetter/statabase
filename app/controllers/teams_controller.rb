@@ -288,13 +288,13 @@ class TeamsController < ApplicationController
       set_season
     end
 
-    if team_is_number?
+    if team_is_number? && @season
       begin
         @team = @season.teams.find(params[:id])
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
       end
-    elsif params[:id]
+    elsif params[:id] && @season
       begin
         @team = @season.teams.find_by(br_id: params[:id].upcase)
       rescue ActiveRecord::RecordNotFound => e
