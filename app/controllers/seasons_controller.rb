@@ -273,12 +273,14 @@ class SeasonsController < ApplicationController
       rescue ActiveRecord::RecordNotFound => e
         @season = nil
       end
-    else
+    elsif season_id
       begin
         @season = Season.find(params[:id])
       rescue ActiveRecord::RecordNotFound => e
         @season = nil
       end
+    else
+      @season = nil
     end
   end
 
@@ -287,7 +289,7 @@ class SeasonsController < ApplicationController
       set_season
     end
 
-    if params[:id]
+    if @season
       begin
         @memberships = Membership.where(season_id: @season.id)
       rescue ActiveRecord::RecordNotFound => e
