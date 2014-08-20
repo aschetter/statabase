@@ -7,39 +7,48 @@
     <ul>
       <li>Standard stat line totals for a single player.</li>
     </ul>
+  </br>
   <li>Advanced Stats:</li>
     <ul>
       <li>Advanced stat line totals for a single player.</li>
     </ul>
+    </br>
   <li>Salaries:</li>
     <ul>
       <li>The amount of money a player earned on a given team.</li>
     </ul>
+    </br>
   <li>Win Shares:</li>
     <ul>
       <li>The estimated amount of wins a player contributed to a team.</li>
     </ul>
+    </br>
   <li>Win Shares Index:</li>
     <ul>
       <li>Compares a player's win share contribution in relation to his salary.</li>
       <li>Normalized so that the MVP's win share index is roughly equal to 1.</li>
     </ul>
+    </br>
   <li>Cost Per Point:</li>
     <ul>
       <li>Compares a player's total points scored in relation to his salary.</li>
     </ul>
+    </br>
   <li>Cost Per Assist:</li>
     <ul>
       <li>Compares a player's total assists in relation to his salary.</li>
     </ul>
+    </br>
   <li>Cost Per Rebound:</li>
     <ul>
       <li>Compares a player's total rebounds in relation to his salary.</li>
     </ul>
+    </br>
   <li>Cost Per Block</li>
     <ul>
       <li>Compares a player's total blocks in relation to his salary.</li>
     </ul>
+    </br>
   <li>Cost Per Minute:</li>
     <ul>
       <li>Compares a player's total minutes in relation to his salary.</li>
@@ -57,46 +66,57 @@
   <ul>
     <li>Get all seasons</li>
   </ul>
+  </br>
   <li>GET /seasons/:id</li>
   <ul>
     <li>Get a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:id/stats</li>
   <ul>
     <li>Get all player stats for a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:id/advanced_stats</li>
   <ul>
     <li>Get all player advanced stats for a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:id/salaries</li>
   <ul>
     <li>Get all player salaries for a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:id/win_shares</li>
   <ul>
     <li>Get all player win shares for a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:id/win_shares_index</li>
   <ul>
     <li>Get all player win shares indices for a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:id/cost_per_point</li>
   <ul>
     <li>Get all player cost per point scored totals for a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:id/cost_per_assist</li>
   <ul>
     <li>Get all player cost per assist totals for a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:id/cost_per_rebound</li>
   <ul>
     <li>Get all player cost per rebound totals for a single season</li>
   </ul>
-  <li>GET /seasons/:id/cost_per_block/li>
+  </br>
+  <li>GET /seasons/:id/cost_per_block</li>
   <ul>
     <li>Get all player cost per block totals for a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:id/cost_per_minute</li>
   <ul>
     <li>Get all player cost per minute totals for a single season</li>
@@ -153,46 +173,57 @@
   <ul>
     <li>Get all teams in a given season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:id</li>
   <ul>
     <li>Get a single team in a given season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:id/stats</li>
   <ul>
     <li>Get all player stats for a given team in a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:id/advanced_stats</li>
   <ul>
     <li>Get all player advanced stats for a given team in a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:id/salaries</li>
   <ul>
     <li>Get all player salaries for a given team in a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:id/win_shares</li>
   <ul>
     <li>Get all player win shares for a given team in a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:id/win_shares_index</li>
   <ul>
     <li>Get all player win shares indices for a given team in a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:id/cost_per_point</li>
   <ul>
     <li>Get all player cost per point scored totals for a given team in a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:id/cost_per_assist</li>
   <ul>
     <li>Get all player cost per assist totals for a given team in a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:id/cost_per_rebound</li>
   <ul>
     <li>Get all player cost per rebound totals for a given team in a single season</li>
   </ul>
-  <li>GET /seasons/:season_id/teams/:id/cost_per_block/li>
+  </br>
+  <li>GET /seasons/:season_id/teams/:id/cost_per_block</li>
   <ul>
     <li>Get all player cost per block totals for a given team in a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:id/cost_per_minute</li>
   <ul>
     <li>Get all player cost per minute totals for a given team in a single season</li>
@@ -203,55 +234,64 @@
 
 <h4>Player id can be passed as the database id or as the player name with the proper capitalization and spacing. For example:</h4>
 
-<h4>lebronjames  -- incorrect</h4>
-<h4>Lebron James -- incorrect</h4>
-<h4>LeBron James -- correct</h4>
+<h4>lebronjames  -- incorrect</br>Lebron James -- incorrect</br>LeBron James -- correct</h4>
 
 <ol>
   <li>GET /seasons/:season_id/teams/:team_id/players</li>
   <ul>
     <li>Get all players for a given team in a single season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:id</li>
   <ul>
     <li>Get a single player for a single team in a given season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:team_id/players/:id/stats</li>
   <ul>
     <li>Get stats for a single player for a single team in a given season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:team_id/players/:id/advanced_stats</li>
   <ul>
     <li>Get advanced stats for a single player for a single team in a given season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:team_id/players/:id/salaries</li>
   <ul>
     <li>Get salary for a single player for a single team in a given season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:team_id/players/:id/win_shares</li>
   <ul>
     <li>Get win shares for a single player for a single team in a given season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:team_id/players/:id/win_shares_index</li>
   <ul>
     <li>Get win shares index for a single player for a single team in a given season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:team_id/players/:id/cost_per_point</li>
   <ul>
     <li>Get cost per point total for a single player for a single team in a given season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:team_id/players/:id/cost_per_assist</li>
   <ul>
     <li>Get cost per assist total for a single player for a single team in a given season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:team_id/players/:id/cost_per_rebound</li>
   <ul>
     <li>Get cost per rebound total for a single player for a single team in a given season</li>
   </ul>
-  <li>GET /seasons/:season_id/teams/:team_id/players/:id/cost_per_block/li>
+  </br>
+  <li>GET /seasons/:season_id/teams/:team_id/players/:id/cost_per_block</li>
   <ul>
     <li>Get cost per block total for a single player for a single team in a given season</li>
   </ul>
+  </br>
   <li>GET /seasons/:season_id/teams/:team_id/players/:id/cost_per_minute</li>
   <ul>
     <li>Get cost per minute total for a single player for a single team in a given season</li>
