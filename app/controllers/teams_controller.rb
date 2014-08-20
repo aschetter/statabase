@@ -5,7 +5,7 @@ class TeamsController < ApplicationController
   before_action :set_memberships
 
   def index
-    # return render_404 if @season.nil?
+    return render_404 if @season.nil?
     @teams = @season.teams.all
 
     render json: @teams
@@ -271,7 +271,7 @@ class TeamsController < ApplicationController
   private
 
   def set_season
-    season_id = params[:id].to_i
+    season_id = params[:season_id].to_i
     if season_id > 1900
       begin
         @season = Season.find_by(year: season_id)
@@ -280,7 +280,7 @@ class TeamsController < ApplicationController
       end
     elsif season_id
       begin
-        @season = Season.find(params[:id])
+        @season = Season.find(season_id)
       rescue ActiveRecord::RecordNotFound => e
         @season = nil
       end
