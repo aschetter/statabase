@@ -18,7 +18,7 @@ require_relative './populate/displayResults.rb'
 
 namespace :db do
   desc "Erase and fill database"
-  task :populate, :year, :team_index :needs => :environment do |t, args|
+  task :populate, :year, :team_index, :needs => :environment do |t, args|
 
     attrs = {}
 
