@@ -16,15 +16,24 @@ require_relative './populate/persistData/persistSalaries.rb'
 
 require_relative './populate/displayResults.rb'
 
+
+namespace :feedstitch do 
+  desc "Perform a rolling update of all feeds"
+  task :update_feeds, :hours_for_full_update, :needs => :env do |t, args|
+    hours_for_full_update = (args[:hours_for_full_update] || 24).to_i
+    Updater.rolling_update(hours_for_full_update)
+  end
+end
+
 namespace :db do
   desc "Erase and fill database"
-  task :populate, :year, :team_index, :needs => :env do |t, args|
+  task :populate, :year, :team_index => :environment do |t, args|
 
     attrs = {}
 
   # XXXXXXXXXXXXXXXXX SEASON XXXXXXXXXXXXXXXXX
 
-    year = args[:year].to_i
+    year = args[:year]
 
     attrs[:@db_season] = BBall.persistSeason(year)
 
@@ -48,7 +57,9 @@ namespace :db do
     }
 
     # br_id: unique team ID in the online database (0-29)
-    br_id = args[:team_index].to_i
+    br_id = args[:team_index]
+
+    # br_id = 18
 
     attrs[:@db_team] = BBall.persistTeam(br_id)
 
