@@ -20,6 +20,10 @@ class SeasonsController < ApplicationController
       stat = Stat.find_by(membership_id: membership.id)
 
       if stat
+        membership = Membership.find(stat.membership_id)
+        player = Player.find(membership.player_id)
+
+        stat.player_name = player.name
         response << stat
       end
     end
@@ -36,6 +40,10 @@ class SeasonsController < ApplicationController
       adv = Adv.find_by(membership_id: membership.id)
 
       if adv
+        membership = Membership.find(adv.membership_id)
+        player = Player.find(membership.player_id)
+
+        adv.player_name = player.name
         response << adv
       end
     end

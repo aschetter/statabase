@@ -5,7 +5,7 @@ class TeamsController < ApplicationController
   before_action :set_memberships
 
   def index
-    return render_404 if @season.nil?
+    # return render_404 if @season.nil?
     @teams = @season.teams.all
 
     render json: @teams
@@ -24,6 +24,10 @@ class TeamsController < ApplicationController
       stat = Stat.find_by(membership_id: membership.id)
 
       if stat
+        membership = Membership.find(stat.membership_id)
+        player = Player.find(membership.player_id)
+
+        stat.player_name = player.name
         response << stat
       end
     end
@@ -40,6 +44,10 @@ class TeamsController < ApplicationController
       adv = Adv.find_by(membership_id: membership.id)
 
       if adv
+        membership = Membership.find(adv.membership_id)
+        player = Player.find(membership.player_id)
+
+        adv.player_name = player.name
         response << adv
       end
     end
