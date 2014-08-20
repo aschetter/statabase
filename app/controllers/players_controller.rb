@@ -215,18 +215,20 @@ class PlayersController < ApplicationController
       set_season
     end
 
-    if team_is_number?
+    if team_is_number? && @season
       begin
-        @team = @season.teams.find(params[:team_id])
+        @team = @season.teams.find(params[:id])
+      rescue ActiveRecord::RecordNotFound => e
+        @team = nil
+      end
+    elsif params[:id] && @season
+      begin
+        @team = @season.teams.find_by(br_id: params[:id].upcase)
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
       end
     else
-      begin
-        @team = @season.teams.find_by(br_id: params[:team_id].upcase)
-      rescue ActiveRecord::RecordNotFound => e
-        @team = nil
-      end
+      @team = nil
     end
   end
 
@@ -242,18 +244,20 @@ class PlayersController < ApplicationController
       set_team
     end
 
-    if player_is_number?
+    if player_is_number? && @team
       begin
         @player = @team.players.find(params[:id])
       rescue ActiveRecord::RecordNotFound => e
         @player = nil
       end
-    else
+    elsif params[:id] && @team
       begin
         @player = @team.players.find_by(name: params[:id])
       rescue ActiveRecord::RecordNotFound => e
         @player = nil
       end
+    else
+      @player = nil
     end
   end
 

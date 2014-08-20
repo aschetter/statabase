@@ -263,19 +263,21 @@ class TeamsController < ApplicationController
   private
 
   def set_season
-    season_id = params[:season_id].to_i
+    season_id = params[:id].to_i
     if season_id > 1900
       begin
         @season = Season.find_by(year: season_id)
       rescue ActiveRecord::RecordNotFound => e
         @season = nil
       end
-    else
+    elsif season_id
       begin
-        @season = Season.find(params[:season_id])
+        @season = Season.find(params[:id])
       rescue ActiveRecord::RecordNotFound => e
         @season = nil
       end
+    else
+      @season = nil
     end
   end
 
