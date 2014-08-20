@@ -191,6 +191,7 @@ class PlayersController < ApplicationController
 
   def set_season
     season_id = params[:season_id].to_i
+
     if season_id > 1900
       begin
         @season = Season.find_by(year: season_id)
@@ -217,13 +218,13 @@ class PlayersController < ApplicationController
 
     if team_is_number? && @season
       begin
-        @team = @season.teams.find(params[:id])
+        @team = @season.teams.find(params[:team_id])
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
       end
-    elsif params[:id] && @season
+    elsif params[:team_id] && @season
       begin
-        @team = @season.teams.find_by(br_id: params[:id].upcase)
+        @team = @season.teams.find_by(br_id: params[:team_id].upcase)
       rescue ActiveRecord::RecordNotFound => e
         @team = nil
       end

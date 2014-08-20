@@ -272,6 +272,7 @@ class TeamsController < ApplicationController
 
   def set_season
     season_id = params[:season_id].to_i
+    
     if season_id > 1900
       begin
         @season = Season.find_by(year: season_id)
