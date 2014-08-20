@@ -20,7 +20,6 @@ namespace :db do
   desc "Erase and fill database"
   task :populate => :environment do
 
-
     attrs = {}
 
   # XXXXXXXXXXXXXXXXX SEASON XXXXXXXXXXXXXXXXX
@@ -49,7 +48,6 @@ namespace :db do
     }
 
     # br_id: unique team ID in the online database (0-29)
-    # br_id = 18
     br_id = ARGV[-1].to_i
 
     attrs[:@db_team] = BBall.persistTeam(br_id)
