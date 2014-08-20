@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  root to: "documentation#index"
+
   def stats_routes
     get 'stats', :on => :member
     get 'advanced_stats', :on => :member
