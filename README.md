@@ -90,24 +90,18 @@ Tech Stack: This application utilizes Rails, Ruby, and Nokogiri Gem.
 
       Team id can be passed as the database id or as the three-letter team identifiers:
 
-| Identifier | Team | Identifier | Team |
-| ---------- | ---- | ---------- | ---- |
-| ATL | Atlanta | MIA | Miami |
-| BOS | Boston | MIL | Milwaukee |
-| BRK | Brooklyn | MIN | Minnesota |
-| CHA | Charlotte | NOP | New Orleans |
-| CHI | Chicago | NYK | New York |
-| CLE | Cleveland | OKC | Oklahoma City |
-| DAL | Dallas | ORL | Orlando |
-| DEN | Denver | PHI | Philadelphia |
-| DET | Detroit | PHO | Phoenix |
-| GSW | Golden State | POR | Portland |
-| HOU | Houston | SAC | Sacramento |
-| IND | Indiana | SAS | San Antonio |
-| LAC | LA Clippers | TOR | Toronto |
-| LAL | LAL Lakers | UTA | Utah |
-| MEM | Memphis | WAS | Washington |
-
+| Identifier | Team | Identifier | Team | Identifier | Team |
+| ---------- | ---- | ---------- | ---- | ---------- | ---- |
+| ATL | Atlanta | HOU | Houston | OKC | Oklahoma City |         
+| BOS | Boston | IND | Indiana | ORL | Orlando |               
+| BRK | Brooklyn | LAC | LA Clippers | PHI | Philadelphia |                
+| CHA | Charlotte | LAL | LAL Lakers | PHO | Phoenix |             
+| CHI | Chicago | MEM | Memphis | POR | Portland |                   
+| CLE | Cleveland | MIA | Miami | SAC | Sacramento |               
+| DAL | Dallas | MIL | Milwaukee | SAS | San Antonio |                 
+| DEN | Denver | MIN | Minnesota | TOR | Toronto |                
+| DET | Detroit | NOP | New Orleans | UTA | Utah |                  
+| GSW | Golden State | NYK | New York | WAS | Washington |              
 
       GET /seasons/:season_id/teams
         Get all teams in a given season
