@@ -18,7 +18,7 @@ require_relative './populate/displayResults.rb'
 
 namespace :db do
   desc "Erase and fill database"
-  task :populate => :environment do
+  task :populate, [:year, :br_id] => :environment do
 
     attrs = {
       players: {
@@ -39,7 +39,8 @@ namespace :db do
 
   # XXXXXXXXXXXXXXXXX SEASON XXXXXXXXXXXXXXXXX
 
-    year = ARGV[-2].to_i
+    # year = ARGV[-2].to_i
+    year = args.year
 
     attrs[:@db_season] = BBall.persistSeason(year)
 
@@ -47,7 +48,8 @@ namespace :db do
 
 
     # br_id: unique team ID in the online database (0-29)
-    br_id = ARGV[-1].to_i
+    # br_id = ARGV[-1].to_i
+    br_id = args.br_id
 
     attrs[:@db_team] = BBall.persistTeam(br_id)
 
