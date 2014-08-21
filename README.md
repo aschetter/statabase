@@ -90,38 +90,38 @@ Tech Stack: This application utilizes Rails, Ruby, and Nokogiri Gem.
 
       Team id can be passed as the database id or as the three-letter team identifiers:
 
-      |   Identifier   |     Team      |
-      | -------------- | ------------- |
-      |      ATL       |    Atlanta    |
-      |      BOS       |     Boston    |
-      |      BRK       |    Brooklyn   |
-      |      CHA       |    Charlotte  |
-      |      CHI       |     Chicago   |
-      |      CLE       |    Cleveland  |
-      |      DAL       |     Dallas    |
-      |      DEN       |     Denver    |
-      |      DET       |     Detroit   |
-      |      GSW       |  Golden State |
-      |      HOU       |     Houston   |
-      |      IND       |     Indiana   |
-      |      LAC       |  LA Clippers  |
-      |      LAL       |  LAL Lakers   |
-      |      MEM       |     Memphis   |
-      |      MIA       |      Miami    |
-      |      MIL       |    Milwaukee  |
-      |      MIN       |    Minnesota  |
-      |      NOP       |  New Orleans  |
-      |      NYK       |    New York   |
-      |      OKC       | Oklahoma City |
-      |      ORL       |     Orlando   |
-      |      PHI       |  Philadelphia |
-      |      PHO       |     Phoenix   |
-      |      POR       |    Portland   |
-      |      SAC       |   Sacramento  |
-      |      SAS       |   San Antonio |
-      |      TOR       |    Toronto    |
-      |      UTA       |      Utah     |
-      |      WAS       |   Washington  |
+      | Identifier | Team |
+      | ---------- | ---- |
+      | ATL | Atlanta |
+      | BOS | Boston |
+      | BRK | Brooklyn |
+      | CHA | Charlotte |
+      | CHI | Chicago |
+      | CLE | Cleveland |
+      | DAL | Dallas |
+      | DEN | Denver |
+      | DET | Detroit |
+      | GSW | Golden State |
+      | HOU | Houston |
+      | IND | Indiana |
+      | LAC | LA Clippers |
+      | LAL | LAL Lakers |
+      | MEM | Memphis |
+      | MIA | Miami |
+      | MIL | Milwaukee |
+      | MIN | Minnesota |
+      | NOP | New Orleans |
+      | NYK | New York |
+      | OKC | Oklahoma City |
+      | ORL | Orlando |
+      | PHI | Philadelphia |
+      | PHO | Phoenix |
+      | POR | Portland |
+      | SAC | Sacramento |
+      | SAS | San Antonio |
+      | TOR | Toronto |
+      | UTA | Utah |
+      | WAS | Washington |
 
       GET /seasons/:season_id/teams
         Get all teams in a given season
