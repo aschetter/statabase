@@ -1,6 +1,6 @@
 module BBall
 
-  def self.displayResults(attrs)  
+  def self.displayResults  
 
     puts ""
     puts "TEAM: #{attrs[:@db_team].br_id}"

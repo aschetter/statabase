@@ -86,7 +86,7 @@ namespace :db do
 
   # XXXXXXXXXXXXXXXXX DISPLAY RESULTS XXXXXXXXXXXXXXXXX
 
-    BBall.displayResults(attrs)
+    BBall.displayResults
 
   end
 end
