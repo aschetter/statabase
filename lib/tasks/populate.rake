@@ -40,7 +40,7 @@ namespace :db do
   # XXXXXXXXXXXXXXXXX SEASON XXXXXXXXXXXXXXXXX
 
     # year = ARGV[-2].to_i
-    year = args[:year]
+    year = args[:year].to_i
 
     attrs[:@db_season] = BBall.persistSeason(year)
 
@@ -49,7 +49,7 @@ namespace :db do
 
     # br_id: unique team ID in the online database (0-29)
     # br_id = ARGV[-1].to_i
-    br_id = args[:br_id]
+    br_id = args[:br_id].to_i
 
     attrs[:@db_team] = BBall.persistTeam(br_id)
 
