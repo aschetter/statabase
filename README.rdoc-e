@@ -10,7 +10,7 @@ Tech Stack: This application utilizes Rails, Ruby, and Nokogiri Gem.
 
 ### Documentation:
 
-  #### Statistics Available:
+#### Statistics Available:
 
     Stats:
       Standard stat line totals for a single player.
@@ -43,9 +43,9 @@ Tech Stack: This application utilizes Rails, Ruby, and Nokogiri Gem.
     Cost Per Minute:
       Compares a player's total minutes in relation to his salary.
 
-  ### Ajax Request Routes:
+### Ajax Request Routes:
 
-    #### SEASONS
+#### SEASONS
 
       --  Season id can be passed as the database season id or the year.
           For example: 2014.
@@ -86,10 +86,10 @@ Tech Stack: This application utilizes Rails, Ruby, and Nokogiri Gem.
       GET /seasons/:id/cost_per_minute
         Get all player cost per minute totals for a single season
 
-    #### TEAMS
+#### TEAMS
 
-      --  Team id can be passed as the database id or as the three-letter
-          team identifiers:
+      Team id can be passed as the database id or as the three-letter
+      team identifiers:
 
           | Identifier| Team |
           |-----|------|
@@ -160,10 +160,10 @@ Tech Stack: This application utilizes Rails, Ruby, and Nokogiri Gem.
       GET /seasons/:season_id/teams/:id/cost_per_minute
         Get all player cost per minute totals for a given team in a single season
 
-    #### PLAYERS
+#### PLAYERS
 
-      --  Player id can be passed as the database id or as the player name with the
-          proper capitalization and spacing. For example:
+      Player id can be passed as the database id or as the player name with the
+      proper capitalization and spacing. For example:
 
           lebronjames  -- incorrect
           Lebron James -- incorrect
