@@ -13,6 +13,6 @@ module BBall
     puts "JUST PLAYER SALARY ADDED: #{$team_stats[:salaries][:added]}"
     puts "PLAYERS UPDATED WITH SALARY INFO: #{$team_stats[:salaries][:updated]}"
 
-    $team_stats = {}
+    # $team_stats = {}
   end
 end
