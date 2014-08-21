@@ -47,8 +47,8 @@ Tech Stack: This application utilizes Rails, Ruby, and Nokogiri Gem.
 
 #### SEASONS
 
-      --  Season id can be passed as the database season id or the year.
-          For example: 2014.
+      Season id can be passed as the database season id or the year.
+      For example: 2014.
 
       GET /seasons
         Get all seasons
