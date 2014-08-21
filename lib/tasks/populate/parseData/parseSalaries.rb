@@ -8,12 +8,12 @@ module BBall
 
     salaries.each do |player|
 
+      salary_info = player.css('td')
       a_tag = salary_info[1].css('a')
 
       if a_tag 
 
-        salary_info = player.css('td')
-        href = salary_info[1].css('a').attr("href").value
+        href = a_tag.attr("href").value
 
         player_salary = {
           br_id: href.slice(11..(href.index('.')-1)),
