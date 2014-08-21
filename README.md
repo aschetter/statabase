@@ -12,36 +12,36 @@ Tech Stack: This application utilizes Rails, Ruby, and Nokogiri Gem.
 
 #### Statistics Available:
 
-##### Stats:
-Standard stat line totals for a single player.
+1. Stats:
+  Standard stat line totals for a single player.
 
-##### Advanced Stats:
-Advanced stat line totals for a single player.
+2. Advanced Stats:
+  Advanced stat line totals for a single player.
 
-##### Salaries:
-The amount of money a player earned on a given team.
+3. Salaries:
+  The amount of money a player earned on a given team.
 
-##### Win Shares:
-The estimated amount of wins a player contributed to a team.
+4. Win Shares:
+  The estimated amount of wins a player contributed to a team.
 
-##### Win Shares Index:
-Compares a player's win share contribution in relation to his salary.
-Normalized so that the MVP's win share index is roughly equal to 1.
+5. Win Shares Index:
+  Compares a player's win share contribution in relation to his salary.
+  Normalized so that the MVP's win share index is roughly equal to 1.
 
-##### Cost Per Point:
-Compares a player's total points scored in relation to his salary.
+6. Cost Per Point:
+  Compares a player's total points scored in relation to his salary.
 
-##### Cost Per Assist:
-Compares a player's total assists in relation to his salary.
+7. Cost Per Assist:
+  Compares a player's total assists in relation to his salary.
 
-##### Cost Per Rebound:
-Compares a player's total rebounds in relation to his salary.
+8. Cost Per Rebound:
+  Compares a player's total rebounds in relation to his salary.
 
-##### Cost Per Block
-Compares a player's total blocks in relation to his salary.
+9. Cost Per Block
+  Compares a player's total blocks in relation to his salary.
 
-##### Cost Per Minute:
-Compares a player's total minutes in relation to his salary.
+10. Cost Per Minute:
+  Compares a player's total minutes in relation to his salary.
 
 ### HTTP Requests:
 
