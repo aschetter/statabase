@@ -9,26 +9,29 @@ module BBall
     
     player_salaries.each do |player|
 
-      @db_player = Player.find_by(br_id: player[:br_id])
+      if player
 
-      if @db_player.nil?
-        @db_player = Player.create(
-          br_id: player[:br_id],
-          name: player[:name]
-        )
+        @db_player = Player.find_by(br_id: player[:br_id])
 
-        Membership.create(player_id: @db_player.id, team_id: attrs[:@db_team][:id], season_id: attrs[:@db_season][:id], salary: player[:salary])
+        if @db_player.nil?
+          @db_player = Player.create(
+            br_id: player[:br_id],
+            name: player[:name]
+          )
 
-        attrs[:salaries][:added] += 1
-        @salary_list[:added] << @db_player.name
-        
-      else
-        membership = Membership.find_by(season_id: attrs[:@db_season][:id], team_id: attrs[:@db_team][:id], player_id: @db_player[:id])
-        membership.salary = player[:salary]
-        membership.save
+          Membership.create(player_id: @db_player.id, team_id: attrs[:@db_team][:id], season_id: attrs[:@db_season][:id], salary: player[:salary])
 
-        attrs[:salaries][:updated] += 1
-        @salary_list[:updated] << @db_player.name
+          attrs[:salaries][:added] += 1
+          @salary_list[:added] << @db_player.name
+          
+        else
+          membership = Membership.find_by(season_id: attrs[:@db_season][:id], team_id: attrs[:@db_team][:id], player_id: @db_player[:id])
+          membership.salary = player[:salary]
+          membership.save
+
+          attrs[:salaries][:updated] += 1
+          @salary_list[:updated] << @db_player.name
+        end
       end
     end
 

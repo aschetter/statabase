@@ -46,7 +46,7 @@ namespace :db do
   # XXXXXXXXXXXXXXXXX TEAM XXXXXXXXXXXXXXXXX
 
     # br_id: unique team ID in the online database (0-29)
-    br_id = args[:br_id].to_i
+    br_id = args[:br_id]
 
     attrs[:@db_team] = BBall.persistTeam(br_id)
 
