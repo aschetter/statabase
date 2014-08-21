@@ -20,17 +20,7 @@ namespace :db do
   desc "Erase and fill database"
   task :populate => :environment do
 
-    attrs = {}
-
-  # XXXXXXXXXXXXXXXXX SEASON XXXXXXXXXXXXXXXXX
-
-    year = ARGV[-2].to_i
-
-    attrs[:@db_season] = BBall.persistSeason(year)
-
-  # XXXXXXXXXXXXXXXXX TEAM XXXXXXXXXXXXXXXXX
-
-    $team_stats = {
+    attrs = {
       players: {
         added: 0,
         already_in_db: 0
@@ -46,6 +36,15 @@ namespace :db do
         updated: 0
       }
     }
+
+  # XXXXXXXXXXXXXXXXX SEASON XXXXXXXXXXXXXXXXX
+
+    year = ARGV[-2].to_i
+
+    attrs[:@db_season] = BBall.persistSeason(year)
+
+  # XXXXXXXXXXXXXXXXX TEAM XXXXXXXXXXXXXXXXX
+
 
     # br_id: unique team ID in the online database (0-29)
     br_id = ARGV[-1].to_i
@@ -63,7 +62,7 @@ namespace :db do
   # XXXXXXXXXXXXXXXXX PLAYER BIOS XXXXXXXXXXXXXXXXX
 
     player_bios = BBall.parsePlayers(htmlPage)
-    team_players = BBall.persistPlayers(player_bios)
+    team_players = BBall.persistPlayers(attrs, player_bios)
 
   # XXXXXXXXXXXXXXXXX TEAM ROSTER XXXXXXXXXXXXXXXXX
 
@@ -86,7 +85,7 @@ namespace :db do
 
   # XXXXXXXXXXXXXXXXX DISPLAY RESULTS XXXXXXXXXXXXXXXXX
 
-    BBall.displayResults
+    BBall.displayResults(attrs)
 
   end
 end

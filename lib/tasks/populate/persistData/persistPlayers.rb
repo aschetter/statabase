@@ -1,6 +1,6 @@
 module BBall
   
-  def self.persistPlayers(player_bios)
+  def self.persistPlayers(attrs, player_bios)
 
     @team_players = {
       added: [],
@@ -26,12 +26,12 @@ module BBall
           college: player[:college]
         )
 
-        $team_stats[:players][:added] += 1
+        attrs[:players][:added] += 1
         @team_players[:added] << @db_player
 
       else
 
-        $team_stats[:players][:already_in_db] += 1
+        attrs[:players][:already_in_db] += 1
         @team_players[:in_db] << @db_player
       end
     end

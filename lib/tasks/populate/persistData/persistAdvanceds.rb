@@ -35,7 +35,7 @@ module BBall
       )
 
       puts db_player.name
-      $team_stats[:advanceds][:added] += 1
+      attrs[:advanceds][:added] += 1
     end
   end
 end

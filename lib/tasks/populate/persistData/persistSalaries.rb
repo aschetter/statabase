@@ -18,7 +18,7 @@ module BBall
 
         Membership.create(player_id: @db_player.id, team_id: attrs[:@db_team][:id], season_id: attrs[:@db_season][:id], salary: player[:salary])
 
-        $team_stats[:salaries][:added] += 1
+        attrs[:salaries][:added] += 1
         @salary_list[:added] << @db_player.name
         
       else
@@ -26,7 +26,7 @@ module BBall
         membership.salary = player[:salary]
         membership.save
 
-        $team_stats[:salaries][:updated] += 1
+        attrs[:salaries][:updated] += 1
         @salary_list[:updated] << @db_player.name
       end
     end

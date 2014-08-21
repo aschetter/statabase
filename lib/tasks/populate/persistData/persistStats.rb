@@ -40,7 +40,7 @@ module BBall
         pts: player[:pts],
       )
 
-      $team_stats[:statlines][:added] += 1
+      attrs[:statlines][:added] += 1
       puts db_player.name
     end
   end
