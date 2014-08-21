@@ -1,6 +1,6 @@
 ## STATaBase
 
-Description: A Rails-based API used to measure the value of NBA players by comparing their statistics against their salaries. The information is scraped from the web, and compiled into a database for Ajax calls.
+Description: A Rails-based API used to measure the value of NBA players by comparing their statistics against their salaries. The information is scraped from the web, and compiled into a database for HTTP requests.
 
 If a player plays on more than one team in a given season, the online database only showed the player's whole salary on one team and none on the other(s). To best calculate a player's value, the data was normalized to show a player's relative salary earned playing on a given team. This was adjusted by totaling the percentage of season games a player played for a given team and multiplying it by his total salary.
 
@@ -12,38 +12,41 @@ Tech Stack: This application utilizes Rails, Ruby, and Nokogiri Gem.
 
 #### Statistics Available:
 
-    Stats:
-      Standard stat line totals for a single player.
+    ##### Stats:
+    Standard stat line totals for a single player.
 
-    Advanced Stats:
-      Advanced stat line totals for a single player.
+    ##### Advanced Stats:
+    Advanced stat line totals for a single player.
 
-    Salaries:
-      The amount of money a player earned on a given team.
+    ##### Salaries:
+    The amount of money a player earned on a given team.
 
-    Win Shares:
-      The estimated amount of wins a player contributed to a team.
+    ##### Win Shares:
+    The estimated amount of wins a player contributed to a team.
 
-    Win Shares Index:
-      Compares a player's win share contribution in relation to his salary.
-      Normalized so that the MVP's win share index is roughly equal to 1.
+    ##### Win Shares Index:
+    Compares a player's win share contribution in relation to his salary.
+    Normalized so that the MVP's win share index is roughly equal to 1.
 
-    Cost Per Point:
-      Compares a player's total points scored in relation to his salary.
+    ##### Cost Per Point:
+    Compares a player's total points scored in relation to his salary.
 
-    Cost Per Assist:
-      Compares a player's total assists in relation to his salary.
+    ##### Cost Per Assist:
+    Compares a player's total assists in relation to his salary.
 
-    Cost Per Rebound:
-      Compares a player's total rebounds in relation to his salary.
+    ##### Cost Per Rebound:
+    Compares a player's total rebounds in relation to his salary.
 
-    Cost Per Block
-      Compares a player's total blocks in relation to his salary.
+    ##### Cost Per Block
+    Compares a player's total blocks in relation to his salary.
 
-    Cost Per Minute:
-      Compares a player's total minutes in relation to his salary.
+    ##### Cost Per Minute:
+    Compares a player's total minutes in relation to his salary.
 
-### Ajax Request Routes:
+### HTTP Requests:
+
+#### All requests must start with the api base url: http://statabase.herokuapp.com.
+##### Additional parameters can be added by the following routes.
 
 #### SEASONS
 
