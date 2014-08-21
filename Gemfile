@@ -43,3 +43,4 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'hirb'
 gem 'nokogiri'
 gem 'rails_12factor', group: :production
+gem 'pry-byebug'

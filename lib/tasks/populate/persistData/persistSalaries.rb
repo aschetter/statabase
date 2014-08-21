@@ -8,6 +8,7 @@ module BBall
     }
     
     player_salaries.each do |player|
+
       @db_player = Player.find_by(br_id: player[:br_id])
 
       if @db_player.nil?
