@@ -19,13 +19,16 @@ module BBall
 
       player_memberships.each do |membership|
 
-        @stats[:total_salary] += membership.salary.to_i
-        @stats[:total_games] += membership.stat.gp.to_i
+        if membership.stat
 
-        membership_id = membership.id
+          @stats[:total_salary] += membership.salary.to_i
+          @stats[:total_games] += membership.stat.gp.to_i
 
-        stats = { membership_id: membership_id, gp: membership.stat.gp.to_i, salary: membership.salary }
-        @player[:memberships] << stats
+          membership_id = membership.id
+
+          stats = { membership_id: membership_id, gp: membership.stat.gp.to_i, salary: membership.salary }
+          @player[:memberships] << stats
+        end
       end
 
       total = { totalGP: @stats[:total_games], totalSalary: @stats[:total_salary] }
